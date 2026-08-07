@@ -82,1322 +82,431 @@
 <!-- /skill:chrome -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PortariaApp - Sistema de Controle de Acesso</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Portaria</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
---bg:oklch(97% 0.005 250);
---surface:oklch(99% 0.003 250);
---surface-alt:oklch(96% 0.006 250);
---text:oklch(18% 0.01 250);
---text-mid:oklch(35% 0.01 250);
---text-light:oklch(55% 0.008 250);
---border:oklch(88% 0.01 250);
---border-strong:oklch(78% 0.015 250);
---primary:oklch(55% 0.2 260);
---primary-hover:oklch(48% 0.2 260);
---primary-light:oklch(94% 0.03 260);
---danger:oklch(55% 0.22 25);
---danger-light:oklch(95% 0.02 25);
---success:oklch(52% 0.15 155);
---success-light:oklch(94% 0.03 155);
---warning:oklch(70% 0.16 70);
---warning-light:oklch(95% 0.03 70);
---radius:10px;
---font:'Inter',system-ui,sans-serif;
-}
-body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;min-height:100vh;font-optical-sizing:auto}
-h1,h2,h3,h4{text-wrap:balance}
+:root{--bg:#e8f5e9;--surface:#fff;--surface-alt:#f9fdf9;--text:#111;--text-mid:#333;--text-light:#666;--border:#a5d6a7;--border-strong:#66bb6a;--primary:#e87510;--primary-hover:#c66000;--danger:#ef4444;--danger-light:#fef2f2;--success:#2e7d32;--success-light:#e8f5e9;--warning:#f59e0b;--warning-light:#fffbeb;--green-dark:#1b5e20;--green-mid:#388e3c;--radius:10px;--blue:#2563eb;--blue-light:#eff6ff}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;min-height:100vh}
 
-/* SETUP WIZARD */
-.wizard-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:oklch(20% 0.04 260)}.wizard-box{background:var(--surface);border-radius:16px;padding:48px 36px;width:100%;max-width:520px;box-shadow:0 24px 64px oklch(0% 0 0 / 0.25)}.wizard-box h1{font-size:1.6rem;font-weight:900;color:var(--primary);margin-bottom:4px;letter-spacing:-0.02em}.wizard-box .sub{color:var(--text-light);margin-bottom:28px;font-size:.85rem}.wizard-step{display:none}.wizard-step.active{display:block}.step-title{font-size:1rem;font-weight:800;margin-bottom:16px;color:var(--text)}.step-desc{font-size:.82rem;color:var(--text-mid);margin-bottom:18px}
-.wizard-nav{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
-.wizard-progress{display:flex;gap:6px;margin-bottom:24px}.wizard-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}.wizard-dot.done{background:var(--primary)}.wizard-dot.current{background:var(--primary);transform:scale(1.3)}
+/* WIZARD */
+.wizard-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#1b5e20,#2e7d32,#1b5e20)}.wizard-box{background:var(--surface);border-radius:14px;padding:44px 34px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.wizard-box h1{font-size:1.4rem;font-weight:800;color:var(--green-dark);margin-bottom:4px}.wizard-box .sub{color:var(--text-light);margin-bottom:24px;font-size:.83rem}
+.wizard-step{display:none}.wizard-step.active{display:block}.step-title{font-size:1rem;font-weight:800;margin-bottom:12px;color:var(--green-dark)}.step-desc{font-size:.8rem;color:var(--text-mid);margin-bottom:16px}
+.wizard-nav{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;padding-top:14px;border-top:2px dashed var(--border)}
+.wizard-progress{display:flex;gap:6px;margin-bottom:20px}.wdot{width:8px;height:8px;border-radius:50%;background:var(--border)}.wdot.done{background:var(--green-mid)}.wdot.cur{background:var(--green-dark);transform:scale(1.3)}
 
 /* LOGIN */
-.login-screen{display:none;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:oklch(20% 0.04 260)}.login-box{background:var(--surface);border-radius:16px;padding:44px 34px;width:100%;max-width:380px;box-shadow:0 20px 60px oklch(0% 0 0 / 0.2)}.login-box h1{font-size:1.4rem;font-weight:900;margin-bottom:4px;letter-spacing:-0.02em}.login-box .company-name{color:var(--primary)}.login-box p{color:var(--text-light);margin-bottom:24px;font-size:.82rem}
-.login-help-btn{margin-top:16px;text-align:center}.login-help-btn button{background:none;border:2px solid var(--border);border-radius:8px;padding:10px 18px;font-size:.78rem;font-weight:600;color:var(--text-mid);cursor:pointer;font-family:inherit}.login-help-btn button:hover{border-color:var(--primary);color:var(--primary)}.help-box{display:none;margin-top:14px;padding:14px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;font-size:.78rem;color:var(--text-mid);text-align:left}.help-box.open{display:block}.help-box a{color:var(--primary);text-decoration:none;font-weight:600}
+.login-screen{display:none;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#1b5e20,#2e7d32,#1b5e20)}.login-box{background:var(--surface);border-radius:14px;padding:44px 34px;width:100%;max-width:370px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.login-box h1{font-size:1.3rem;font-weight:800;color:var(--green-dark);margin-bottom:4px}.login-box p{color:var(--text-light);margin-bottom:24px;font-size:.83rem}
+.login-help-btn{margin-top:16px;text-align:center}.login-help-btn button{background:none;border:2px solid var(--border);border-radius:8px;padding:10px 18px;font-size:.8rem;font-weight:600;color:var(--green-mid);cursor:pointer;font-family:inherit}.login-help-btn button:hover{border-color:var(--green-mid);background:var(--surface-alt)}.help-box{display:none;margin-top:14px;padding:14px;background:var(--surface-alt);border:2px solid var(--border);border-radius:10px;font-size:.78rem;color:var(--text-mid);text-align:left}.help-box.open{display:block}.help-box a{color:var(--blue);text-decoration:none;font-weight:600}
 
-/* FORM */
-.fg{margin-bottom:12px}.fg label{display:block;font-size:.7rem;font-weight:700;color:var(--text-mid);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}.fg input,.fg select,.fg textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border-strong);border-radius:8px;font-size:.9rem;font-weight:500;font-family:inherit;background:var(--surface);color:var(--text);transition:border-color .15s,box-shadow .15s}.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px oklch(55% 0.2 260 / 0.12)}.fg input::placeholder,.fg textarea::placeholder{color:oklch(65% 0.005 250);font-weight:400}.fg textarea{resize:vertical;min-height:60px}.fg select{cursor:pointer}
+/* FORMS */
+.fg{margin-bottom:11px}.fg label{display:block;font-size:.72rem;font-weight:800;color:var(--text-mid);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}.fg input,.fg select,.fg textarea{width:100%;padding:11px 13px;border:2px solid var(--border-strong);border-radius:8px;font-size:.92rem;font-weight:500;font-family:inherit;background:#fff;color:var(--text)}.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--green-dark);box-shadow:0 0 0 3px rgba(56,142,60,.2)}.fg input::placeholder,.fg textarea::placeholder{color:#999;font-weight:400}.fg textarea{resize:vertical;min-height:60px}.fg select{cursor:pointer}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.form-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .1s cubic-bezier(0.22,1,0.36,1),opacity .15s}.btn:active{transform:scale(0.97)}.btn-primary{background:var(--primary);color:oklch(99% 0 0)}.btn-primary:hover{background:var(--primary-hover)}.btn-success{background:var(--success);color:oklch(99% 0 0)}.btn-danger{background:var(--danger);color:oklch(99% 0 0)}.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-mid)}.btn-outline:hover{border-color:var(--primary);color:var(--primary)}.btn-sm{padding:6px 11px;font-size:.74rem}.btn-lg{padding:14px 28px;font-size:1rem;border-radius:10px}.btn-full{width:100%;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 16px;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}.btn:active{opacity:.8}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}.btn-green{background:var(--green-mid);color:#fff}.btn-green:hover{background:var(--green-dark)}.btn-danger{background:var(--danger);color:#fff}.btn-success{background:var(--success);color:#fff}.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text-mid)}.btn-outline:hover{border-color:var(--green-mid);color:var(--green-mid)}.btn-sm{padding:5px 10px;font-size:.74rem}.btn-lg{padding:14px 28px;font-size:1rem;border-radius:10px}.btn-full{width:100%;justify-content:center}
 
-/* APP LAYOUT */
-.app{display:none;min-height:100vh}
-.topbar{background:oklch(22% 0.04 260);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-left{display:flex;align-items:center;gap:14px}
-.topbar-left h2{font-size:.95rem;font-weight:800;color:oklch(99% 0 0);letter-spacing:-0.01em}
-.nav-tabs{display:flex;gap:2px;overflow-x:auto}
-.nav-tab{padding:7px 13px;border:none;background:transparent;border-radius:7px;font-size:.76rem;font-weight:700;color:oklch(99% 0 0 / 0.5);cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s,color .15s}
-.nav-tab.active{background:oklch(99% 0 0 / 0.12);color:oklch(99% 0 0)}
-.nav-tab:hover:not(.active){color:oklch(99% 0 0 / 0.85)}
-.topbar-right{display:flex;align-items:center;gap:10px;font-size:.78rem;color:oklch(99% 0 0 / 0.7)}
-
-/* MAIN */
-.main-content{padding:20px;max-width:1200px;margin:0 auto}
-.tab-content{display:none}.tab-content.active{display:block}
-.section-title{font-size:.85rem;font-weight:800;margin-bottom:10px;margin-top:20px;color:var(--text);display:flex;align-items:center;gap:8px}.section-title .badge{background:var(--primary-light);color:var(--primary);padding:3px 8px;border-radius:8px;font-size:.68rem;font-weight:700}
+/* APP */
+.app{display:none;min-height:100vh}.topbar{background:var(--green-dark);padding:0 18px;height:50px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}.topbar-left{display:flex;align-items:center;gap:12px}.topbar-left h2{font-size:1rem;font-weight:800;color:#fff}.nav-tabs{display:flex;gap:2px;overflow-x:auto}.nav-tab{padding:6px 12px;border:none;background:transparent;border-radius:6px;font-size:.76rem;font-weight:700;color:rgba(255,255,255,.55);cursor:pointer;font-family:inherit;white-space:nowrap}.nav-tab.active{background:rgba(255,255,255,.2);color:#fff}.nav-tab:hover:not(.active){color:rgba(255,255,255,.9)}.topbar-right{display:flex;align-items:center;gap:9px;font-size:.78rem;color:rgba(255,255,255,.8)}
+.main-content{padding:18px;max-width:1200px;margin:0 auto}.tab-content{display:none}.tab-content.active{display:block}
+.section-title{font-size:.85rem;font-weight:800;margin-bottom:10px;margin-top:18px;color:var(--green-dark);display:flex;align-items:center;gap:8px}.section-title .badge{background:var(--success-light);color:var(--success);padding:2px 7px;border-radius:8px;font-size:.68rem;font-weight:700}
 
 /* TABLE */
-.table-wrap{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow-x:auto;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:.8rem;font-variant-numeric:tabular-nums}th{text-align:left;padding:10px 12px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);background:var(--surface-alt);border-bottom:1px solid var(--border)}td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}tr:last-child td{border-bottom:none}tr:hover td{background:oklch(96% 0.005 260)}
-.plate-tag{display:inline-block;background:oklch(22% 0.04 260);color:oklch(99% 0 0);padding:3px 8px;border-radius:5px;font-weight:800;font-size:.76rem;letter-spacing:.04em}
-.status-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:.68rem;font-weight:700}.status-badge.out{background:var(--danger-light);color:var(--danger)}.status-badge.in{background:var(--success-light);color:var(--success)}
+.table-wrap{background:var(--surface);border-radius:var(--radius);border:2px solid var(--border);overflow-x:auto;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:.8rem}th{text-align:left;padding:8px 10px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);background:var(--surface-alt);border-bottom:1px solid var(--border)}td{padding:8px 10px;border-bottom:1px solid #e8f5e9;vertical-align:middle}tr:last-child td{border-bottom:none}tr:hover td{background:#f1f8f2}
+.plate-tag{display:inline-block;background:var(--green-dark);color:#fff;padding:2px 7px;border-radius:4px;font-weight:800;font-size:.76rem}.status-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700}.status-badge.out{background:var(--danger-light);color:var(--danger)}.status-badge.in{background:var(--success-light);color:var(--success)}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:oklch(0% 0 0 / 0.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}.modal-overlay.active{display:flex}.modal{background:var(--surface);border-radius:14px;padding:24px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto}.modal h3{font-size:1.05rem;font-weight:800;margin-bottom:16px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}.modal-overlay.active{display:flex}.modal{background:var(--surface);border-radius:14px;padding:22px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto}.modal h3{font-size:1rem;font-weight:800;margin-bottom:14px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 
 /* TOOLBAR */
-.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}.toolbar .search-input{flex:1;min-width:160px;padding:9px 13px;border:1.5px solid var(--border-strong);border-radius:8px;font-size:.83rem;font-weight:500;font-family:inherit;background:var(--surface)}.toolbar .search-input:focus{outline:none;border-color:var(--primary)}
-
-/* FILTER */
-.filter-bar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}.filter-bar .fg{margin-bottom:0}.filter-bar .fg input,.filter-bar .fg select{padding:8px 10px;font-size:.8rem}
-
-/* CARDS / SECTIONS */
-.card-form{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:18px}
-.separator{border:none;border-top:1.5px dashed var(--border);margin:14px 0}
-.empty-state{text-align:center;padding:24px;color:var(--text-light);font-size:.82rem}
-
-/* SUB TABS */
-.sub-tabs{display:flex;gap:4px;margin-bottom:14px}.sub-tab{padding:8px 15px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:.78rem;font-weight:700;font-family:inherit;transition:all .15s}.sub-tab.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;background:oklch(22% 0.04 260);color:oklch(99% 0 0);padding:13px 22px;border-radius:9px;font-size:.82rem;font-weight:600;box-shadow:0 8px 28px oklch(0% 0 0 / 0.18);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(0.22,1,0.36,1);z-index:2000;max-width:360px}.toast.show{transform:translateY(0);opacity:1}.toast.error{background:var(--danger)}
-
-/* MOVEMENT */
-.mov-easy{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}.mov-easy-btn{padding:28px 16px;border:2px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;text-align:center;font-family:inherit;transition:all .15s cubic-bezier(0.22,1,0.36,1)}.mov-easy-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.mov-easy-btn.sel-e{border-color:var(--success);background:var(--success-light)}.mov-easy-btn.sel-s{border-color:var(--danger);background:var(--danger-light)}.mov-easy-btn .icon{font-size:2.2rem;margin-bottom:6px}.mov-easy-btn .label{font-size:1.05rem;font-weight:800}
-.mov-form-section{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}.mov-form-section h4{font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em}
-
-/* DASHBOARD */
-.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}.stat-box{background:var(--surface);border-radius:var(--radius);padding:18px;border:1.5px solid var(--border);text-align:center}.stat-box .label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px}.stat-box .value{font-size:2rem;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}.stat-box.primary .value{color:var(--primary)}.stat-box.success .value{color:var(--success)}.stat-box.danger .value{color:var(--danger)}
-
-/* AUTOCOMPLETE */
-.ac-wrap{position:relative}.ac-list{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--primary);border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:200;display:none;box-shadow:0 8px 24px oklch(0% 0 0 / 0.1)}.ac-list.open{display:block}.ac-item{padding:9px 13px;cursor:pointer;font-size:.82rem;border-bottom:1px solid var(--border)}.ac-item:last-child{border-bottom:none}.ac-item:hover{background:var(--primary-light);color:var(--primary)}.ac-item .ac-sub{font-size:.7rem;color:var(--text-light)}
-
-/* MISC */
-.pedestre-tag{display:inline-block;background:oklch(92% 0.03 260);color:var(--primary);padding:3px 8px;border-radius:5px;font-weight:700;font-size:.72rem}
-.filial-tag{display:inline-block;background:var(--warning-light);color:oklch(40% 0.1 70);padding:3px 8px;border-radius:5px;font-size:.68rem;font-weight:700}
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}.toolbar .search-input{flex:1;min-width:160px;padding:8px 11px;border:2px solid var(--border-strong);border-radius:7px;font-size:.83rem;font-weight:500;font-family:inherit;background:#fff}.toolbar .search-input:focus{outline:none;border-color:var(--green-dark)}
+.filter-bar{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}.filter-bar .fg{margin-bottom:0}.filter-bar .fg input,.filter-bar .fg select{padding:7px 9px;font-size:.8rem}
+.card-form{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:18px}
+.empty-state{text-align:center;padding:20px;color:var(--text-light);font-size:.8rem}
+.sub-tabs{display:flex;gap:4px;margin-bottom:14px}.sub-tab{padding:7px 14px;border:2px solid var(--border);border-radius:7px;background:var(--surface);cursor:pointer;font-size:.78rem;font-weight:700;font-family:inherit}.sub-tab.active{border-color:var(--green-mid);background:var(--success-light);color:var(--success)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--green-dark);color:#fff;padding:12px 20px;border-radius:8px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.15);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);z-index:2000;max-width:340px}.toast.show{transform:translateY(0);opacity:1}.toast.error{background:var(--danger)}
+.filial-tag{display:inline-block;background:var(--warning-light);color:#92400e;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700}
+.vehicle-out-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:9px;margin-bottom:16px}.vehicle-out-item{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;align-items:center;justify-content:space-between;gap:9px}.vehicle-out-item .info{flex:1}.vehicle-out-item .info .plate{font-weight:800;font-size:.88rem;margin-bottom:2px}.vehicle-out-item .info .meta{font-size:.72rem;color:var(--text-light)}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}.stat-box{background:var(--surface);border-radius:var(--radius);padding:16px;border:2px solid var(--border);text-align:center}.stat-box .label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin-bottom:4px}.stat-box .value{font-size:1.8rem;font-weight:800;font-variant-numeric:tabular-nums}.stat-box.primary .value{color:var(--primary)}.stat-box.success .value{color:var(--success)}.stat-box.danger .value{color:var(--danger)}.time-tag{font-size:.7rem;color:var(--warning);font-weight:600}
+.change-pass-link{cursor:pointer;color:rgba(255,255,255,.6);font-size:.72rem;text-decoration:underline}
+.mov-easy{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}.mov-easy-btn{padding:24px 16px;border:3px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;text-align:center;font-family:inherit;transition:all .15s}.mov-easy-btn:hover{border-color:var(--green-mid)}.mov-easy-btn.sel-e{border-color:var(--success);background:var(--success-light)}.mov-easy-btn.sel-s{border-color:var(--danger);background:var(--danger-light)}.mov-easy-btn .icon{font-size:2rem;margin-bottom:4px}.mov-easy-btn .label{font-size:1rem;font-weight:800}
+.mov-form-section{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px}.mov-form-section h4{font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:12px;text-transform:uppercase}
 .filial-checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.filial-check{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--text-mid)}.filial-check input{width:auto}
 .cap-alert{background:var(--warning-light);border:2px solid var(--warning);border-radius:10px;padding:14px;margin-bottom:14px;font-size:.85rem;font-weight:600;color:var(--text);display:none}.cap-alert.visible{display:block}
-.change-pass-link{cursor:pointer;color:oklch(99% 0 0 / 0.5);font-size:.72rem;text-decoration:underline}
-.time-tag{font-size:.7rem;color:var(--warning);font-weight:600}
-.vehicle-out-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:16px}.vehicle-out-item{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;align-items:center;justify-content:space-between;gap:9px}.vehicle-out-item .info{flex:1}.vehicle-out-item .info .plate{font-weight:800;font-size:.88rem;margin-bottom:2px}.vehicle-out-item .info .meta{font-size:.72rem;color:var(--text-light)}
-
-/* BRANDING FOOTER */
-.brand-footer{text-align:center;padding:20px;font-size:.7rem;color:var(--text-light);border-top:1px solid var(--border);margin-top:40px}
-.brand-footer a{color:var(--primary);text-decoration:none;font-weight:600}
-
-/* CONFIG PANEL */
-.config-section{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}.config-section h4{font-size:.85rem;font-weight:800;margin-bottom:14px}
-.config-export{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
-@media(max-width:768px){
-.topbar{padding:8px 12px;flex-wrap:wrap;gap:6px;height:auto}
-.main-content{padding:14px}
-.modal{padding:16px}
-.toolbar,.filter-bar{flex-direction:column;align-items:stretch}
-.form-row,.form-row-3,.form-row-4{grid-template-columns:1fr}
-.dash-grid{grid-template-columns:1fr 1fr}
-.mov-easy{grid-template-columns:1fr 1fr}
-.wizard-box{padding:32px 22px}
-}
+.ac-wrap{position:relative}.ac-list{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:2px solid var(--green-mid);border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:200;display:none;box-shadow:0 8px 20px rgba(0,0,0,.1)}.ac-list.open{display:block}.ac-item{padding:8px 12px;cursor:pointer;font-size:.82rem;border-bottom:1px solid var(--border)}.ac-item:last-child{border-bottom:none}.ac-item:hover{background:var(--success-light);color:var(--green-dark)}.ac-item .ac-sub{font-size:.7rem;color:var(--text-light)}
+.pedestre-tag{display:inline-block;background:#e3f2fd;color:#1565c0;padding:2px 7px;border-radius:4px;font-weight:700;font-size:.72rem}
+.confirm-line{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.84rem}.confirm-line:last-child{border:none}.confirm-line .cl{font-weight:700;color:var(--text-mid)}.confirm-line .cv{font-weight:600}
+@media(max-width:768px){.topbar{padding:8px 12px;flex-wrap:wrap;gap:5px;height:auto}.main-content{padding:12px}.modal{padding:16px}.toolbar,.filter-bar{flex-direction:column;align-items:stretch}.form-row,.form-row-3,.form-row-4{grid-template-columns:1fr}.dash-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<!-- ===================== SETUP WIZARD ===================== -->
+<!-- WIZARD (primeiro acesso) -->
 <div class="wizard-screen" id="wizardScreen">
 <div class="wizard-box">
-<h1>PortariaApp</h1>
-<p class="sub">Configure seu sistema de controle de acesso em minutos</p>
+<h1>🏢 Portaria</h1>
+<p class="sub">Configure seu sistema de controle de acesso</p>
 <div class="wizard-progress" id="wizProg"></div>
-
-<div class="wizard-step active" id="wStep1">
+<div class="wizard-step active" id="ws1">
 <div class="step-title">1. Dados da Empresa</div>
-<div class="step-desc">Essas informações aparecerão no sistema para seus porteiros.</div>
-<div class="fg"><label>Nome da Empresa</label><input type="text" id="wCompany" placeholder="Ex: Grupo Industrial ABC"></div>
-<div class="fg"><label>E-mail de Suporte</label><input type="email" id="wEmail" placeholder="suporte@suaempresa.com"></div>
-<div class="fg"><label>WhatsApp Suporte (opcional)</label><input type="text" id="wWhats" placeholder="(XX) XXXXX-XXXX"></div>
+<div class="step-desc">Essas informações aparecem na tela de login e no suporte.</div>
+<div class="fg"><label>Nome da Empresa *</label><input type="text" id="wCompany" placeholder="Ex: Grupo Industrial ABC"></div>
+<div class="form-row"><div class="fg"><label>E-mail Suporte</label><input type="email" id="wEmail" placeholder="suporte@empresa.com"></div><div class="fg"><label>WhatsApp</label><input type="text" id="wWhats" placeholder="(XX) XXXXX-XXXX"></div></div>
 </div>
-
-<div class="wizard-step" id="wStep2">
+<div class="wizard-step" id="ws2">
 <div class="step-title">2. Filiais / Unidades</div>
-<div class="step-desc">Adicione as unidades que usarão o sistema. Mínimo 1.</div>
-<div id="wFiliais"><div class="fg"><input type="text" class="wfil-input" placeholder="Nome da filial (ex: Matriz)"></div></div>
-<button class="btn btn-outline btn-sm" onclick="addWizFilial()" style="margin-top:4px">+ Adicionar filial</button>
+<div class="step-desc">Adicione pelo menos 1 filial.</div>
+<div id="wFiliais"><div class="fg"><input type="text" class="wfil" placeholder="Nome da filial (ex: Matriz)"></div></div>
+<button class="btn btn-outline btn-sm" onclick="addWFil()">+ Filial</button>
 </div>
-
-<div class="wizard-step" id="wStep3">
+<div class="wizard-step" id="ws3">
 <div class="step-title">3. Usuário Administrador</div>
-<div class="step-desc">Crie o login do administrador principal.</div>
-<div class="fg"><label>Login</label><input type="text" id="wAdmLogin" placeholder="admin"></div>
-<div class="fg"><label>Senha</label><input type="password" id="wAdmPass" placeholder="Senha forte"></div>
-<div class="fg"><label>Confirmar Senha</label><input type="password" id="wAdmPass2" placeholder="Repita a senha"></div>
+<div class="step-desc">Crie o acesso principal do sistema.</div>
+<div class="fg"><label>Nome</label><input type="text" id="wAdmNome" placeholder="Nome completo"></div>
+<div class="form-row"><div class="fg"><label>Login *</label><input type="text" id="wAdmLogin" placeholder="admin"></div><div class="fg"><label>Senha *</label><input type="password" id="wAdmPass" placeholder="Senha forte"></div></div>
 </div>
-
-<div class="wizard-step" id="wStep4">
-<div class="step-title">4. Pronto!</div>
-<div class="step-desc">Seu sistema está configurado. Você pode adicionar porteiros e veículos depois pelo painel Admin.</div>
-<div style="background:var(--success-light);border-radius:10px;padding:16px;font-size:.85rem;color:var(--success);font-weight:600;margin-top:12px">
-✓ Sistema pronto para uso. Faça login com as credenciais que você criou.
+<div class="wizard-step" id="ws4">
+<div class="step-title">✅ Tudo pronto!</div>
+<div class="step-desc">Sistema configurado. Faça login com as credenciais criadas.</div>
+<div style="background:var(--success-light);border:2px solid var(--border);border-radius:10px;padding:16px;font-size:.85rem;color:var(--success);font-weight:600">Sistema pronto para uso. Adicione porteiros e veículos pelo painel Admin.</div>
 </div>
-</div>
-
-<div class="wizard-nav">
-<button class="btn btn-outline" id="wBtnBack" onclick="wizBack()" style="display:none">Voltar</button>
-<button class="btn btn-primary" id="wBtnNext" onclick="wizNext()">Próximo</button>
-</div>
+<div class="wizard-nav"><button class="btn btn-outline" id="wBack" onclick="wizBack()" style="display:none">Voltar</button><button class="btn btn-green" id="wNext" onclick="wizNext()">Próximo</button></div>
 </div>
 </div>
 
-<!-- ===================== LOGIN ===================== -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
 <div class="login-box">
-<h1><span class="company-name" id="loginCompany">PortariaApp</span></h1>
+<h1 id="loginTitle">Portaria</h1>
 <p>Sistema de controle de acesso e veículos</p>
 <div class="fg"><label>Usuário</label><input type="text" id="lU" placeholder="Login" autocomplete="off"></div>
 <div class="fg"><label>Senha</label><input type="password" id="lP" placeholder="Senha" autocomplete="off"></div>
-<button class="btn btn-primary btn-full btn-lg" onclick="doLogin()" style="margin-top:14px">Entrar</button>
-<p id="lErr" style="color:var(--danger);font-size:.76rem;margin-top:10px;display:none"></p>
-<div class="login-help-btn"><button onclick="document.getElementById('helpBox').classList.toggle('open')">❓ Ajuda / Suporte</button></div>
+<button class="btn btn-green btn-full" onclick="doLogin()" style="margin-top:12px">Entrar</button>
+<p id="lErr" style="color:var(--danger);font-size:.76rem;margin-top:9px;display:none"></p>
+<div class="login-help-btn"><button onclick="document.getElementById('helpBox').classList.toggle('open')">❓ Ajuda</button></div>
 <div class="help-box" id="helpBox"></div>
 </div>
 </div>
 
-<!-- ===================== APP ===================== -->
+<!-- APP -->
 <div class="app" id="app">
-<div class="topbar">
-<div class="topbar-left">
-<h2 id="appTitle">Portaria</h2>
-<nav class="nav-tabs">
-<button class="nav-tab active" data-tab="dashboard">Dashboard</button>
-<button class="nav-tab" data-tab="movement">Movimentação</button>
-<button class="nav-tab" data-tab="cadastro">Cadastro</button>
-<button class="nav-tab" data-tab="history">Histórico</button>
-<button class="nav-tab" data-tab="admin" id="adminTab" style="display:none">Admin</button>
-</nav>
-</div>
-<div class="topbar-right">
-<span id="uFilial" style="font-size:.7rem;opacity:.7"></span>
-<span id="uName"></span>
-<span class="change-pass-link" onclick="openMyPass()">Senha</span>
-<button class="btn btn-outline btn-sm" style="border-color:oklch(99% 0 0 / 0.2);color:oklch(99% 0 0 / 0.6)" onclick="logout()">Sair</button>
-</div>
-</div>
+<div class="topbar"><div class="topbar-left"><h2 id="appTitle">Portaria</h2><nav class="nav-tabs"><button class="nav-tab active" data-tab="dashboard">Dashboard</button><button class="nav-tab" data-tab="movement">Movimentação</button><button class="nav-tab" data-tab="cadastro">Cadastro</button><button class="nav-tab" data-tab="history">Histórico</button><button class="nav-tab" data-tab="admin" id="adminTab" style="display:none">Admin</button></nav></div><div class="topbar-right"><span id="uFilial" style="font-size:.7rem;opacity:.7"></span><span id="uName"></span><span class="change-pass-link" onclick="openModal('modalPass')">Senha</span><button class="btn btn-outline btn-sm" style="border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7)" onclick="logout()">Sair</button></div></div>
 
 <div class="main-content">
-
 <!-- DASHBOARD -->
 <div class="tab-content active" id="tab-dashboard">
-<div class="dash-grid">
-<div class="stat-box success"><div class="label">Terceiros Dentro</div><div class="value" id="dVD">0</div></div>
-<div class="stat-box primary"><div class="label">Patrimônio Fora</div><div class="value" id="dVF">0</div></div>
-<div class="stat-box"><div class="label">Entradas Hoje</div><div class="value" id="dEH">0</div></div>
-<div class="stat-box danger"><div class="label">Saídas Hoje</div><div class="value" id="dSH">0</div></div>
-</div>
+<div class="dash-grid"><div class="stat-box success"><div class="label">Terceiros Dentro</div><div class="value" id="dVD">0</div></div><div class="stat-box primary"><div class="label">Patrimônio Fora</div><div class="value" id="dVF">0</div></div><div class="stat-box"><div class="label">Entradas Hoje</div><div class="value" id="dEH">0</div></div><div class="stat-box danger"><div class="label">Saídas Hoje</div><div class="value" id="dSH">0</div></div></div>
 <div class="section-title">Terceiros / Veículos Dentro <span class="badge" id="dVDB">0</span></div>
-<div class="table-wrap"><table><thead><tr><th>Placa</th><th>Modelo</th><th>Motorista</th><th>Tipo</th><th>Filial</th><th>Entrada</th><th>Tempo</th></tr></thead><tbody id="dTbDentro"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Placa</th><th>Modelo</th><th>Motorista</th><th>Tipo</th><th>Filial</th><th>Entrada</th><th>Tempo</th></tr></thead><tbody id="dTbD"></tbody></table></div>
 <div class="section-title">Patrimônio Fora <span class="badge" id="dVFB">0</span></div>
-<div class="table-wrap"><table><thead><tr><th>Placa</th><th>Modelo</th><th>Motorista</th><th>Filial</th><th>Saída</th><th>Tempo</th></tr></thead><tbody id="dTbFora"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Placa</th><th>Modelo</th><th>Motorista</th><th>Filial</th><th>Saída</th><th>Tempo</th></tr></thead><tbody id="dTbF"></tbody></table></div>
 </div>
 
-<!-- MOVEMENT -->
+<!-- MOVIMENTAÇÃO -->
 <div class="tab-content" id="tab-movement">
-<div class="mov-easy">
-<button class="mov-easy-btn" id="mBtnE" onclick="setMT('entrada')"><div class="icon">⬇️</div><div class="label">ENTRADA</div></button>
-<button class="mov-easy-btn" id="mBtnS" onclick="setMT('saida')"><div class="icon">⬆️</div><div class="label">SAÍDA</div></button>
-</div>
+<div class="mov-easy"><button class="mov-easy-btn" id="mBtnE" onclick="setMT('entrada')"><div class="icon">⬇️</div><div class="label">ENTRADA</div></button><button class="mov-easy-btn" id="mBtnS" onclick="setMT('saida')"><div class="icon">⬆️</div><div class="label">SAÍDA</div></button></div>
 <div class="cap-alert" id="capAlert"></div>
-<div class="mov-form-section">
-<h4>Dados da Movimentação</h4>
-<div class="form-row" style="margin-bottom:12px">
-<div class="fg" style="margin-bottom:0"><label>Pessoa * <span style="font-weight:400;text-transform:none;font-size:.65rem">(nome ou CPF)</span></label><div class="ac-wrap"><input type="text" id="mPInput" placeholder="Buscar por nome ou CPF..." autocomplete="off" oninput="acPessoa()" onfocus="acPessoa()"><input type="hidden" id="mP"><div class="ac-list" id="mPList"></div></div></div>
-<div class="fg" style="margin-bottom:0"><label>Veículo <span style="font-weight:400;text-transform:none;font-size:.65rem">(placa, vazio = pedestre)</span></label><div class="ac-wrap"><input type="text" id="mVInput" placeholder="Buscar por placa..." autocomplete="off" oninput="acVeiculo()" onfocus="acVeiculo()"><input type="hidden" id="mV"><div class="ac-list" id="mVList"></div></div></div>
+<div class="mov-form-section"><h4>Dados da Movimentação</h4>
+<div class="form-row" style="margin-bottom:12px"><div class="fg" style="margin-bottom:0"><label>Pessoa * (nome ou CPF)</label><div class="ac-wrap"><input type="text" id="mPInput" placeholder="Buscar..." autocomplete="off" oninput="acP()" onfocus="acP()"><input type="hidden" id="mP"><div class="ac-list" id="mPList"></div></div></div><div class="fg" style="margin-bottom:0"><label>Veículo (placa, vazio = pedestre)</label><div class="ac-wrap"><input type="text" id="mVInput" placeholder="Buscar placa..." autocomplete="off" oninput="acV()" onfocus="acV()"><input type="hidden" id="mV"><div class="ac-list" id="mVList"></div></div></div></div>
+<div class="form-row-4" style="margin-bottom:12px"><div class="fg" style="margin-bottom:0"><label>Tipo Pessoa *</label><input type="text" id="mPT" readonly style="background:#f5f5f5;font-weight:600;cursor:default" placeholder="(automático)"></div><div class="fg" style="margin-bottom:0"><label>Filial *</label><select id="mFil"></select></div><div class="fg" style="margin-bottom:0"><label>NF</label><input type="text" id="mNF" placeholder="Nota fiscal"></div><div class="fg" style="margin-bottom:0"><label>Protocolo</label><input type="text" id="mPr" placeholder="Nº protocolo"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:flex-end;margin-bottom:14px"><div class="fg" style="margin-bottom:0"><label>Capacetes</label><input type="number" id="mCap" min="0" value="0"></div><div class="fg" style="margin-bottom:0"><label>Observação</label><input type="text" id="mOb" placeholder="Obs"></div><div style="display:flex;gap:6px;padding-bottom:2px"><button class="btn btn-green btn-sm" onclick="openModal('modalPessoa')">+ Pessoa</button><button class="btn btn-green btn-sm" onclick="openModal('modalVeiculo')">+ Veículo</button></div></div>
+<button class="btn btn-primary btn-lg btn-full" onclick="preConfirm()">Registrar Movimentação</button>
 </div>
-<div class="form-row-4" style="margin-bottom:12px">
-<div class="fg" style="margin-bottom:0"><label>Tipo Pessoa *</label><input type="text" id="mPT" placeholder="(automático)" readonly style="background:var(--surface-alt);cursor:default;font-weight:600"></div>
-<div class="fg" style="margin-bottom:0"><label>Filial *</label><select id="mFil"></select></div>
-<div class="fg" style="margin-bottom:0"><label>NF</label><input type="text" id="mNF" placeholder="Nota fiscal"></div>
-<div class="fg" style="margin-bottom:0"><label>Protocolo</label><input type="text" id="mPr" placeholder="Nº protocolo"></div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:flex-end;margin-bottom:14px">
-<div class="fg" style="margin-bottom:0"><label>Capacetes</label><input type="number" id="mCap" min="0" value="0"></div>
-<div class="fg" style="margin-bottom:0"><label>Observação</label><input type="text" id="mOb" placeholder="Obs"></div>
-<div style="display:flex;gap:6px;padding-bottom:2px">
-<button class="btn btn-primary btn-sm" onclick="openPM()">+ Pessoa</button>
-<button class="btn btn-primary btn-sm" onclick="openVM()">+ Veículo</button>
-</div>
-</div>
-<button class="btn btn-primary btn-lg btn-full" onclick="regMov()" id="movSubmitBtn">Registrar Movimentação</button>
-</div>
-<div class="section-title">Patrimônio FORA <span class="badge" id="bVO">0</span></div>
-<div class="vehicle-out-list" id="voL"></div>
+<div class="section-title">Patrimônio FORA <span class="badge" id="bVO">0</span></div><div class="vehicle-out-list" id="voL"></div>
 <div class="section-title">Terceiros / Veículos DENTRO <span class="badge" id="bTI">0</span></div>
 <div class="table-wrap"><table><thead><tr><th>Placa</th><th>Motorista</th><th>Tipo</th><th>NF</th><th>Cap.</th><th>Entrada</th><th>Tempo</th><th>Ação</th></tr></thead><tbody id="tiB"></tbody></table></div>
 </div>
 
 <!-- CADASTRO -->
 <div class="tab-content" id="tab-cadastro">
-<div class="sub-tabs">
-<button class="sub-tab active" onclick="showSub(this,'cPessoa')">Pessoas</button>
-<button class="sub-tab" onclick="showSub(this,'cVeiculo')">Veículos</button>
-<button class="sub-tab" onclick="showSub(this,'cEmpresa')">Empresas</button>
-<button class="sub-tab" onclick="showSub(this,'cPatrimonio')">Patrimônio</button>
-</div>
-
+<div class="sub-tabs"><button class="sub-tab active" onclick="showSub(this,'cPessoa')">Pessoas</button><button class="sub-tab" onclick="showSub(this,'cVeiculo')">Veículos</button></div>
 <div id="cPessoa">
-<div class="card-form">
-<div class="form-row-3">
-<div class="fg"><label>Nome Completo *</label><input type="text" id="cpNome"></div>
-<div class="fg"><label>CPF *</label><input type="text" id="cpCPF" placeholder="000.000.000-00" oninput="maskCPF(this)"></div>
-<div class="fg"><label>Tipo *</label><select id="cpTipo"><option value="funcionario">Funcionário</option><option value="motorista">Motorista</option><option value="visitante">Visitante</option><option value="fornecedor">Fornecedor</option><option value="cliente">Cliente</option><option value="terceiros">Terceiros</option></select></div>
+<div class="toolbar"><input type="text" class="search-input" id="cpS" placeholder="Buscar pessoas..." oninput="renderPessoas()"><button class="btn btn-green btn-sm" onclick="openModal('modalCadPessoa')">+ Pessoa</button></div>
+<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Tipo</th><th>CPF/RG</th><th>Empresa</th><th>Veículo</th><th>Ações</th></tr></thead><tbody id="cpTb"></tbody></table></div>
 </div>
-<div class="form-row-3">
-<div class="fg"><label>Empresa</label><input type="text" id="cpEmpresa" placeholder="Nome da empresa"></div>
-<div class="fg"><label>Telefone</label><input type="text" id="cpTel"></div>
-<div class="fg" style="display:flex;align-items:flex-end"><button class="btn btn-primary btn-full" onclick="savePessoa()">Salvar Pessoa</button></div>
-</div>
-</div>
-<div class="toolbar"><input type="text" class="search-input" id="cpSearch" placeholder="Buscar pessoas..." oninput="renderPessoas()"></div>
-<div class="table-wrap"><table><thead><tr><th>Nome</th><th>CPF</th><th>Tipo</th><th>Empresa</th><th>Ações</th></tr></thead><tbody id="cpTb"></tbody></table></div>
-</div>
-
 <div id="cVeiculo" style="display:none">
-<div class="card-form">
-<div class="form-row-4">
-<div class="fg"><label>Placa *</label><input type="text" id="cvPlaca" placeholder="ABC-1234" oninput="maskPlaca(this)"></div>
-<div class="fg"><label>Categoria *</label><select id="cvCat"><option value="veiculo">Veículo</option><option value="maquina">Máquina</option><option value="bicicleta">Bicicleta</option><option value="outros">Outros</option></select></div>
-<div class="fg"><label>Modelo</label><input type="text" id="cvModelo"></div>
-<div class="fg"><label>Cor</label><input type="text" id="cvCor"></div>
-</div>
-<div class="form-row-3">
-<div class="fg"><label>Proprietário</label><input type="text" id="cvProp"></div>
-<div class="fg"><label>Tipo</label><select id="cvTipo"><option value="terceiro">Terceiro</option><option value="patrimonio">Patrimônio</option></select></div>
-<div class="fg" style="display:flex;align-items:flex-end"><button class="btn btn-primary btn-full" onclick="saveVeiculo()">Salvar Veículo</button></div>
-</div>
-<div class="fg" id="cvFilialWrap" style="display:none"><label>Filial do Patrimônio</label><select id="cvFilial"></select></div>
-</div>
-<div class="toolbar"><input type="text" class="search-input" id="cvSearch" placeholder="Buscar veículos..." oninput="renderVeiculos()"></div>
-<div class="table-wrap"><table><thead><tr><th>Placa</th><th>Categoria</th><th>Modelo</th><th>Cor</th><th>Tipo</th><th>Proprietário</th><th>Ações</th></tr></thead><tbody id="cvTb"></tbody></table></div>
-</div>
-
-<div id="cEmpresa" style="display:none">
-<div class="card-form">
-<div class="form-row-3">
-<div class="fg"><label>Razão Social *</label><input type="text" id="ceNome"></div>
-<div class="fg"><label>CNPJ</label><input type="text" id="ceCNPJ" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)"></div>
-<div class="fg" style="display:flex;align-items:flex-end"><button class="btn btn-primary btn-full" onclick="saveEmpresa()">Salvar Empresa</button></div>
-</div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Ações</th></tr></thead><tbody id="ceTb"></tbody></table></div>
-</div>
-
-<div id="cPatrimonio" style="display:none">
-<div class="empty-state">Patrimônios são veículos com tipo "Patrimônio". Cadastre na aba Veículos.</div>
+<div class="toolbar"><input type="text" class="search-input" id="cvS" placeholder="Buscar veículos..." oninput="renderVeiculos()"><button class="btn btn-green btn-sm" onclick="openModal('modalCadVeiculo')">+ Veículo</button></div>
+<div class="table-wrap"><table><thead><tr><th>Placa/ID</th><th>Cat.</th><th>Tipo</th><th>Modelo</th><th>Proprietário</th><th>Ações</th></tr></thead><tbody id="cvTb"></tbody></table></div>
 </div>
 </div>
 
-<!-- HISTORY -->
+<!-- HISTÓRICO -->
 <div class="tab-content" id="tab-history">
 <div class="filter-bar">
+<div class="fg"><label>Pessoa</label><input type="text" id="hP" placeholder="Nome/CPF"></div>
+<div class="fg"><label>Placa</label><input type="text" id="hPl" placeholder="Placa"></div>
+<div class="fg"><label>NF</label><input type="text" id="hNF"></div>
+<div class="fg"><label>Protocolo</label><input type="text" id="hProt"></div>
+<div class="fg"><label>Filial</label><select id="hFil"><option value="">Todas</option></select></div>
 <div class="fg"><label>De</label><input type="date" id="hDe"></div>
 <div class="fg"><label>Até</label><input type="date" id="hAte"></div>
-<div class="fg"><label>Tipo</label><select id="hTipo"><option value="">Todos</option><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div>
-<div class="fg"><label>Filial</label><select id="hFil"><option value="">Todas</option></select></div>
-<button class="btn btn-primary btn-sm" onclick="renderHistory()">Filtrar</button>
-<button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 Exportar CSV</button>
+<div class="fg"><label>Dir.</label><select id="hDir"><option value="">Todas</option><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div>
+<button class="btn btn-outline btn-sm" onclick="clearFilters()">Limpar</button>
+<button class="btn btn-green btn-sm" onclick="exportCSV()">📥 CSV</button>
 </div>
-<div class="table-wrap"><table><thead><tr><th>Data/Hora</th><th>Tipo</th><th>Pessoa</th><th>Veículo</th><th>Filial</th><th>NF</th><th>Cap.</th><th>Obs</th><th>Porteiro</th><th>Ações</th></tr></thead><tbody id="hTb"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Data</th><th>Dir.</th><th>Pessoa</th><th>Tipo</th><th>Veículo</th><th>NF</th><th>Prot.</th><th>Filial</th><th>Cap.</th><th>Obs</th><th>Porteiro</th><th>Ações</th></tr></thead><tbody id="hTb"></tbody></table></div>
 </div>
 
 <!-- ADMIN -->
 <div class="tab-content" id="tab-admin">
 <div class="section-title">Gerenciar Usuários</div>
 <div class="card-form">
-<div class="form-row-4">
-<div class="fg"><label>Login *</label><input type="text" id="auLogin"></div>
-<div class="fg"><label>Senha *</label><input type="password" id="auPass"></div>
-<div class="fg"><label>Nome</label><input type="text" id="auNome"></div>
-<div class="fg"><label>Perfil</label><select id="auPerfil"><option value="porteiro">Porteiro</option><option value="admin">Administrador</option></select></div>
+<div class="form-row-3"><div class="fg"><label>Nome</label><input type="text" id="auNome"></div><div class="fg"><label>Email</label><input type="email" id="auEmail"></div><div class="fg"><label>CPF</label><input type="text" id="auCPF" oninput="maskCPF(this)"></div></div>
+<div class="form-row-4"><div class="fg"><label>Login *</label><input type="text" id="auLogin"></div><div class="fg"><label>Senha *</label><input type="password" id="auPass"></div><div class="fg"><label>Papel</label><select id="auPerfil"><option value="porteiro">Porteiro</option><option value="admin">Admin</option></select></div><div class="fg"><label>Filiais</label><div class="filial-checks" id="auFil"></div></div></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-green" onclick="saveUser()">Adicionar Usuário</button><button class="btn btn-outline" onclick="clearUserForm()">Cancelar</button></div>
 </div>
-<div class="fg"><label>Filiais (acesso)</label><div class="filial-checks" id="auFiliais"></div></div>
-<button class="btn btn-primary" onclick="saveUser()" style="margin-top:10px">Salvar Usuário</button>
-</div>
-<div class="table-wrap"><table><thead><tr><th>Login</th><th>Nome</th><th>Perfil</th><th>Filiais</th><th>Ações</th></tr></thead><tbody id="auTb"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Login</th><th>Email</th><th>Papel</th><th>Filiais</th><th>Ações</th></tr></thead><tbody id="auTb"></tbody></table></div>
 
-<div class="section-title" style="margin-top:32px">Configurações do Sistema</div>
-<div class="config-section">
-<h4>Dados da Empresa</h4>
-<div class="form-row-3">
-<div class="fg"><label>Nome</label><input type="text" id="cfgCompany"></div>
-<div class="fg"><label>E-mail Suporte</label><input type="email" id="cfgEmail"></div>
-<div class="fg"><label>WhatsApp</label><input type="text" id="cfgWhats"></div>
+<div class="section-title" style="margin-top:28px">Empresas / Filiais</div>
+<div class="card-form">
+<div class="form-row-4"><div class="fg"><label>Nome *</label><input type="text" id="efNome"></div><div class="fg"><label>CNPJ</label><input type="text" id="efCNPJ" oninput="maskCNPJ(this)"></div><div class="fg"><label>Tipo</label><select id="efTipo"><option value="filial">Filial</option><option value="cliente">Cliente</option><option value="fornecedor">Fornecedor</option><option value="transportadora">Transportadora</option></select></div><div class="fg"><label>Telefone</label><input type="text" id="efTel"></div></div>
+<button class="btn btn-green btn-sm" onclick="saveEmpresa()">+ Empresa / Filial</button>
 </div>
-<button class="btn btn-primary btn-sm" onclick="saveConfig()">Salvar</button>
-</div>
+<div class="table-wrap"><table><thead><tr><th>Nome</th><th>CNPJ</th><th>Tipo</th><th>Telefone</th><th>Ações</th></tr></thead><tbody id="efTb"></tbody></table></div>
 
-<div class="config-section">
-<h4>Filiais</h4>
-<div id="cfgFiliais"></div>
-<button class="btn btn-outline btn-sm" onclick="addFilialCfg()" style="margin-top:8px">+ Adicionar filial</button>
-<button class="btn btn-primary btn-sm" onclick="saveFiliais()" style="margin-top:8px;margin-left:6px">Salvar</button>
+<div class="section-title" style="margin-top:28px">Configurações / Backup</div>
+<div class="card-form">
+<div class="form-row-3"><div class="fg"><label>Nome Empresa</label><input type="text" id="cfgN"></div><div class="fg"><label>Email Suporte</label><input type="email" id="cfgE"></div><div class="fg"><label>WhatsApp</label><input type="text" id="cfgW"></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-green btn-sm" onclick="saveCfg()">Salvar Config</button><button class="btn btn-primary btn-sm" onclick="exportAll()">📤 Exportar Backup</button><button class="btn btn-outline btn-sm" onclick="document.getElementById('impFile').click()">📥 Importar</button><input type="file" id="impFile" accept=".json" style="display:none" onchange="importAll(event)"><button class="btn btn-danger btn-sm" onclick="resetAll()">🗑️ Resetar</button></div>
 </div>
-
-<div class="config-section">
-<h4>Backup / Restauração</h4>
-<p style="font-size:.78rem;color:var(--text-light);margin-bottom:12px">Exporte todos os dados ou importe um backup anterior.</p>
-<div class="config-export">
-<button class="btn btn-primary btn-sm" onclick="exportAll()">📤 Exportar Tudo (JSON)</button>
-<button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥 Importar Backup</button>
-<input type="file" id="importFile" accept=".json" style="display:none" onchange="importAll(event)">
-<button class="btn btn-danger btn-sm" onclick="resetAll()">🗑️ Resetar Sistema</button>
 </div>
 </div>
 </div>
 
-<div class="brand-footer">
-<a href="#">PortariaApp</a> v2.0 — Sistema de Controle de Acesso
-</div>
-</div>
-</div>
+<!-- MODAIS -->
+<div class="modal-overlay" id="modalPessoa"><div class="modal"><h3>Cadastrar Pessoa (rápido)</h3><div class="form-row"><div class="fg"><label>Nome *</label><input type="text" id="mpN"></div><div class="fg"><label>CPF/RG *</label><input type="text" id="mpC" oninput="maskCPF(this)"></div></div><div class="form-row"><div class="fg"><label>Tipo *</label><select id="mpT"><option value="funcionario">Funcionário</option><option value="diretor">Diretor</option><option value="motorista">Motorista</option><option value="terceiros">Terceiros</option><option value="visitante">Visitante</option><option value="fornecedor">Fornecedor</option><option value="cliente">Cliente</option></select></div><div class="fg"><label>Empresa</label><input type="text" id="mpE"></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalPessoa')">Cancelar</button><button class="btn btn-green" onclick="quickPessoa()">Salvar</button></div></div></div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modalPessoa"><div class="modal"><h3>Nova Pessoa (rápido)</h3><div class="form-row"><div class="fg"><label>Nome *</label><input type="text" id="mpNome"></div><div class="fg"><label>CPF *</label><input type="text" id="mpCPF" oninput="maskCPF(this)"></div></div><div class="form-row"><div class="fg"><label>Tipo</label><select id="mpTipo"><option value="motorista">Motorista</option><option value="visitante">Visitante</option><option value="fornecedor">Fornecedor</option><option value="cliente">Cliente</option><option value="terceiros">Terceiros</option></select></div><div class="fg"><label>Empresa</label><input type="text" id="mpEmp"></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalPessoa')">Cancelar</button><button class="btn btn-primary" onclick="quickPessoa()">Salvar</button></div></div></div>
+<div class="modal-overlay" id="modalVeiculo"><div class="modal"><h3>Cadastrar Veículo (rápido)</h3><div class="form-row"><div class="fg"><label>Placa *</label><input type="text" id="mvPl" oninput="maskPlaca(this)"></div><div class="fg"><label>Categoria</label><select id="mvCat"><option value="veiculo">Veículo</option><option value="maquina">Máquina</option><option value="bicicleta">Bicicleta</option><option value="outros">Outros</option></select></div></div><div class="form-row"><div class="fg"><label>Modelo</label><input type="text" id="mvMod"></div><div class="fg"><label>Proprietário</label><input type="text" id="mvProp"></div></div><div class="form-row"><div class="fg"><label>Tipo</label><select id="mvTipo"><option value="terceiro">Terceiro</option><option value="patrimonio">Patrimônio</option></select></div><div class="fg"><label>Cor</label><input type="text" id="mvCor"></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalVeiculo')">Cancelar</button><button class="btn btn-green" onclick="quickVeiculo()">Salvar</button></div></div></div>
 
-<div class="modal-overlay" id="modalVeiculo"><div class="modal"><h3>Novo Veículo (rápido)</h3><div class="form-row"><div class="fg"><label>Placa *</label><input type="text" id="mvPlaca" oninput="maskPlaca(this)"></div><div class="fg"><label>Categoria</label><select id="mvCat"><option value="veiculo">Veículo</option><option value="maquina">Máquina</option><option value="bicicleta">Bicicleta</option><option value="outros">Outros</option></select></div></div><div class="form-row"><div class="fg"><label>Modelo</label><input type="text" id="mvMod"></div><div class="fg"><label>Proprietário</label><input type="text" id="mvProp"></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalVeiculo')">Cancelar</button><button class="btn btn-primary" onclick="quickVeiculo()">Salvar</button></div></div></div>
+<div class="modal-overlay" id="modalCadPessoa"><div class="modal"><h3>Cadastrar Pessoa</h3><div class="form-row"><div class="fg"><label>Nome *</label><input type="text" id="cpN"></div><div class="fg"><label>CPF/RG *</label><input type="text" id="cpC" oninput="maskCPF(this)"></div></div><div class="form-row-3"><div class="fg"><label>Tipo *</label><select id="cpT"><option value="funcionario">Funcionário</option><option value="diretor">Diretor</option><option value="motorista">Motorista</option><option value="terceiros">Terceiros</option><option value="visitante">Visitante</option><option value="fornecedor">Fornecedor</option><option value="cliente">Cliente</option></select></div><div class="fg"><label>Empresa</label><select id="cpEmp"><option value="">Nenhuma</option></select></div><div class="fg"><label>Empresa (digitar)</label><input type="text" id="cpEmpTxt"></div></div><div class="fg" id="cpVeicWrap"><label>Veículo (vincular)</label><div class="form-row-3"><div class="fg"><label>Placa</label><input type="text" id="cpVPl"></div><div class="fg"><label>Modelo</label><input type="text" id="cpVMod"></div><div class="fg"><label>Cor</label><input type="text" id="cpVCor"></div></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalCadPessoa')">Cancelar</button><button class="btn btn-green" onclick="cadPessoa()">Salvar</button></div></div></div>
 
-<div class="modal-overlay" id="modalPass"><div class="modal"><h3>Alterar Minha Senha</h3><div class="fg"><label>Senha Atual</label><input type="password" id="myOldP"></div><div class="fg"><label>Nova Senha</label><input type="password" id="myNewP"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalPass')">Cancelar</button><button class="btn btn-primary" onclick="changeMyPass()">Alterar</button></div></div></div>
+<div class="modal-overlay" id="modalCadVeiculo"><div class="modal"><h3>Cadastrar Veículo</h3><div class="form-row"><div class="fg"><label>Categoria</label><select id="cvCat2"><option value="veiculo">Veículo</option><option value="maquina">Máquina</option><option value="bicicleta">Bicicleta</option><option value="outros">Outros</option></select></div><div class="fg"><label>Tipo</label><select id="cvTipo2"><option value="patrimonio">Patrimônio</option><option value="proprio">Próprio</option><option value="terceiro">Terceiro</option></select></div></div><div class="form-row"><div class="fg"><label>Placa *</label><input type="text" id="cvPl2" oninput="maskPlaca(this)"></div><div class="fg"><label>Modelo</label><input type="text" id="cvMod2"></div></div><div class="form-row"><div class="fg"><label>Cor</label><input type="text" id="cvCor2"></div><div class="fg"><label>Proprietário</label><select id="cvProp2"><option value="">Nenhum</option></select></div></div><div class="fg"><label>Obs</label><input type="text" id="cvObs2"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalCadVeiculo')">Cancelar</button><button class="btn btn-green" onclick="cadVeiculo()">Salvar</button></div></div></div>
 
-<div class="modal-overlay" id="modalEditHist"><div class="modal"><h3>Editar Registro</h3><div class="form-row"><div class="fg"><label>Data</label><input type="date" id="ehDate"></div><div class="fg"><label>Hora</label><input type="time" id="ehTime"></div></div><div class="form-row"><div class="fg"><label>NF</label><input type="text" id="ehNF"></div><div class="fg"><label>Protocolo</label><input type="text" id="ehProt"></div></div><div class="form-row"><div class="fg"><label>Capacetes</label><input type="number" id="ehCap" min="0"></div><div class="fg"><label>Obs</label><input type="text" id="ehObs"></div></div><input type="hidden" id="ehId"><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalEditHist')">Cancelar</button><button class="btn btn-primary" onclick="saveEditHist()">Salvar</button></div></div></div>
+<div class="modal-overlay" id="modalConfirm"><div class="modal"><h3>Confirmar</h3><div id="confirmBody"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalConfirm')">Cancelar</button><button class="btn btn-primary" onclick="regMov()">Confirmar</button></div></div></div>
+
+<div class="modal-overlay" id="modalEditHist"><div class="modal"><h3>Editar Movimentação</h3><div class="form-row"><div class="fg"><label>Data</label><input type="date" id="ehDt"></div><div class="fg"><label>Hora</label><input type="time" id="ehTm"></div></div><div class="form-row"><div class="fg"><label>Direção</label><select id="ehDir"><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div><div class="fg"><label>Capacetes</label><input type="number" id="ehCap" min="0"></div></div><div class="form-row"><div class="fg"><label>Filial</label><select id="ehFil"></select></div><div class="fg"><label>NF</label><input type="text" id="ehNF"></div></div><div class="form-row"><div class="fg"><label>Protocolo</label><input type="text" id="ehProt"></div><div class="fg"><label>Observações</label><input type="text" id="ehObs"></div></div><input type="hidden" id="ehId"><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalEditHist')">Cancelar</button><button class="btn btn-green" onclick="saveEditHist()">Salvar</button></div></div></div>
+
+<div class="modal-overlay" id="modalPass"><div class="modal"><h3>Alterar Senha</h3><div class="fg"><label>Atual</label><input type="password" id="myOldP"></div><div class="fg"><label>Nova</label><input type="password" id="myNewP"></div><div class="fg"><label>Confirmar</label><input type="password" id="myNewP2"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalPass')">Cancelar</button><button class="btn btn-green" onclick="changePass()">Alterar</button></div></div></div>
+
+<div class="modal-overlay" id="modalResetPass"><div class="modal"><h3>Redefinir Senha</h3><div class="fg"><label>Nova</label><input type="password" id="rpNew"></div><div class="fg"><label>Confirmar</label><input type="password" id="rpNew2"></div><input type="hidden" id="rpId"><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modalResetPass')">Cancelar</button><button class="btn btn-green" onclick="resetPass()">Redefinir</button></div></div></div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ===================== DATA LAYER (localStorage) =====================
-const KEYS = {
-  config: 'pa_config',
-  users: 'pa_users',
-  pessoas: 'pa_pessoas',
-  veiculos: 'pa_veiculos',
-  empresas: 'pa_empresas',
-  movimentos: 'pa_movimentos'
-};
+// ===== DATA =====
+const K={cfg:'pt_cfg',users:'pt_users',pessoas:'pt_pessoas',veiculos:'pt_veiculos',empresas:'pt_empresas',movs:'pt_movs'};
+function gD(k){try{return JSON.parse(localStorage.getItem(k))||null}catch{return null}}
+function sD(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 
-function getData(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; } }
-function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+// ===== TOAST =====
+function toast(m,e){const t=document.getElementById('toast');t.textContent=m;t.className='toast show'+(e?' error':'');setTimeout(()=>t.className='toast',3000)}
 
-// ===================== TOAST =====================
-function toast(msg, err) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (err ? ' error' : '');
-  setTimeout(() => t.className = 'toast', 3000);
+// ===== WIZARD =====
+let wStep=1;const wTotal=4;
+function renderWDots(){const c=document.getElementById('wizProg');c.innerHTML='';for(let i=1;i<=wTotal;i++){const d=document.createElement('div');d.className='wdot'+(i<wStep?' done':'')+(i===wStep?' cur':'');c.appendChild(d)}}
+function showWStep(){document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('active',i+1===wStep));document.getElementById('wBack').style.display=wStep>1?'':'none';document.getElementById('wNext').textContent=wStep===wTotal?'Finalizar':'Próximo';renderWDots()}
+function wizNext(){
+if(wStep===1&&!document.getElementById('wCompany').value.trim()){toast('Preencha o nome',true);return}
+if(wStep===2){const f=[...document.querySelectorAll('.wfil')].map(i=>i.value.trim()).filter(Boolean);if(!f.length){toast('Adicione 1 filial',true);return}}
+if(wStep===3){const l=document.getElementById('wAdmLogin').value.trim(),p=document.getElementById('wAdmPass').value;if(!l||!p){toast('Login e senha obrigatórios',true);return}}
+if(wStep===wTotal){finishWiz();return}
+wStep++;showWStep()
+}
+function wizBack(){if(wStep>1){wStep--;showWStep()}}
+function addWFil(){const d=document.createElement('div');d.className='fg';d.innerHTML='<input type="text" class="wfil" placeholder="Nome da filial">';document.getElementById('wFiliais').appendChild(d)}
+function finishWiz(){
+const filiais=[...document.querySelectorAll('.wfil')].map(i=>i.value.trim()).filter(Boolean);
+const cfg={company:document.getElementById('wCompany').value.trim(),email:document.getElementById('wEmail').value.trim(),whatsapp:document.getElementById('wWhats').value.trim(),filiais,setupDone:true};
+const users=[{id:uid(),login:document.getElementById('wAdmLogin').value.trim(),pass:document.getElementById('wAdmPass').value,nome:document.getElementById('wAdmNome').value.trim()||'Administrador',perfil:'admin',filiais:[],email:'',cpf:''}];
+sD(K.cfg,cfg);sD(K.users,users);sD(K.pessoas,[]);sD(K.veiculos,[]);sD(K.empresas,filiais.map(f=>({id:uid(),nome:f,cnpj:'',tipo:'filial',telefone:''})));sD(K.movs,[]);
+document.getElementById('wizardScreen').style.display='none';showLogin()
 }
 
-// ===================== WIZARD =====================
-let wizStep = 1;
-const wizTotal = 4;
+// ===== LOGIN =====
+let CU=null;
+function showLogin(){const cfg=gD(K.cfg);document.getElementById('loginScreen').style.display='flex';document.getElementById('loginTitle').textContent=cfg.company;const hb=document.getElementById('helpBox');let h='';if(cfg.email)h+='📧 <a href="mailto:'+cfg.email+'">'+cfg.email+'</a><br>';if(cfg.whatsapp)h+='📱 <a href="https://wa.me/'+cfg.whatsapp.replace(/\D/g,'')+'">'+cfg.whatsapp+'</a>';hb.innerHTML=h||'Contate o administrador.'}
+function doLogin(){const l=document.getElementById('lU').value.trim(),p=document.getElementById('lP').value;const users=gD(K.users)||[];const u=users.find(x=>x.login===l&&x.pass===p);if(!u){document.getElementById('lErr').style.display='block';document.getElementById('lErr').textContent='Usuário ou senha incorretos';return}CU=u;document.getElementById('loginScreen').style.display='none';startApp()}
+function logout(){CU=null;document.getElementById('app').style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('lU').value='';document.getElementById('lP').value='';document.getElementById('lErr').style.display='none'}
 
-function renderWizDots() {
-  const c = document.getElementById('wizProg');
-  c.innerHTML = '';
-  for (let i = 1; i <= wizTotal; i++) {
-    const d = document.createElement('div');
-    d.className = 'wizard-dot' + (i < wizStep ? ' done' : '') + (i === wizStep ? ' current' : '');
-    c.appendChild(d);
-  }
+// ===== APP =====
+function startApp(){const cfg=gD(K.cfg);document.getElementById('app').style.display='block';document.getElementById('appTitle').textContent=cfg.company;document.getElementById('uName').textContent=CU.nome||CU.login;document.getElementById('uFilial').textContent=CU.filiais&&CU.filiais.length?CU.filiais.join(', '):'Todas';document.getElementById('adminTab').style.display=CU.perfil==='admin'?'':'none';popFil();renderAll()}
+function renderAll(){renderDash();renderMovTab();renderPessoas();renderVeiculos();renderHistory();if(CU.perfil==='admin')renderAdmin()}
+
+// ===== NAV =====
+document.addEventListener('click',e=>{if(e.target.classList.contains('nav-tab')){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+e.target.dataset.tab).classList.add('active')}});
+function showSub(btn,id){btn.parentElement.querySelectorAll('.sub-tab').forEach(s=>s.classList.remove('active'));btn.classList.add('active');['cPessoa','cVeiculo'].forEach(x=>{const el=document.getElementById(x);if(el)el.style.display=x===id?'':'none'})}
+
+// ===== FILIAIS =====
+function getFiliais(){return(gD(K.cfg)||{}).filiais||[]}
+function canSee(f){if(!CU)return false;if(!CU.filiais||!CU.filiais.length)return true;return CU.filiais.includes(f)}
+function popFil(){const fs=getFiliais();['mFil','hFil','ehFil'].forEach(id=>{const s=document.getElementById(id);if(!s)return;const isF=id!=='mFil';s.innerHTML=isF?'<option value="">Todas</option>':'';fs.forEach(f=>{if(canSee(f))s.innerHTML+='<option value="'+f+'">'+f+'</option>'})});const mf=document.getElementById('mFil');if(mf&&CU&&CU.filiais&&CU.filiais.length===1)mf.value=CU.filiais[0]}
+
+// ===== DASHBOARD =====
+function renderDash(){
+const movs=gD(K.movs)||[],veics=gD(K.veiculos)||[],pessoas=gD(K.pessoas)||[];
+const today=new Date().toISOString().slice(0,10);
+const entradas=movs.filter(m=>m.tipo==='entrada'),saidas=movs.filter(m=>m.tipo==='saida');
+const dentro=[],fora=[];
+entradas.forEach(e=>{if(!saidas.find(s=>s.pessoaId===e.pessoaId&&s.veiculoId===e.veiculoId&&new Date(s.data)>new Date(e.data))){const v=veics.find(x=>x.id===e.veiculoId);if(!v||v.tipo!=='patrimonio')dentro.push({...e,veiculo:v})}});
+veics.filter(v=>v.tipo==='patrimonio').forEach(p=>{const last=movs.filter(m=>m.veiculoId===p.id).sort((a,b)=>new Date(b.data)-new Date(a.data))[0];if(last&&last.tipo==='saida')fora.push({...last,veiculo:p})});
+const tM=movs.filter(m=>m.data&&m.data.startsWith(today));
+document.getElementById('dVD').textContent=dentro.length;document.getElementById('dVF').textContent=fora.length;
+document.getElementById('dEH').textContent=tM.filter(m=>m.tipo==='entrada').length;document.getElementById('dSH').textContent=tM.filter(m=>m.tipo==='saida').length;
+document.getElementById('dVDB').textContent=dentro.length;document.getElementById('dVFB').textContent=fora.length;
+const dTbD=document.getElementById('dTbD');
+dTbD.innerHTML=dentro.length?dentro.map(d=>{const p=pessoas.find(x=>x.id===d.pessoaId);return'<tr><td>'+(d.veiculo?'<span class="plate-tag">'+d.veiculo.placa+'</span>':'<span class="pedestre-tag">PEDESTRE</span>')+'</td><td>'+(d.veiculo?d.veiculo.modelo||'-':'-')+'</td><td>'+(p?p.nome:'-')+'</td><td>'+(d.tipoPessoa||'-')+'</td><td><span class="filial-tag">'+(d.filial||'-')+'</span></td><td>'+fD(d.data)+'</td><td class="time-tag">'+tD(d.data)+'</td></tr>'}).join(''):'<tr><td colspan="7" class="empty-state">Nenhum terceiro dentro</td></tr>';
+const dTbF=document.getElementById('dTbF');
+dTbF.innerHTML=fora.length?fora.map(d=>{const p=pessoas.find(x=>x.id===d.pessoaId);return'<tr><td><span class="plate-tag">'+(d.veiculo?d.veiculo.placa:'-')+'</span></td><td>'+(d.veiculo?d.veiculo.modelo||'-':'-')+'</td><td>'+(p?p.nome:'-')+'</td><td><span class="filial-tag">'+(d.filial||'-')+'</span></td><td>'+fD(d.data)+'</td><td class="time-tag">'+tD(d.data)+'</td></tr>'}).join(''):'<tr><td colspan="6" class="empty-state">Nenhum patrimônio fora</td></tr>';
 }
 
-function showWizStep() {
-  document.querySelectorAll('.wizard-step').forEach((s, i) => {
-    s.classList.toggle('active', i + 1 === wizStep);
-  });
-  document.getElementById('wBtnBack').style.display = wizStep > 1 ? '' : 'none';
-  document.getElementById('wBtnNext').textContent = wizStep === wizTotal ? 'Finalizar' : 'Próximo';
-  renderWizDots();
+// ===== MOVEMENT =====
+let movType=null;
+function setMT(t){movType=t;document.getElementById('mBtnE').className='mov-easy-btn'+(t==='entrada'?' sel-e':'');document.getElementById('mBtnS').className='mov-easy-btn'+(t==='saida'?' sel-s':'');if(t==='saida')checkCap();else document.getElementById('capAlert').classList.remove('visible')}
+function checkCap(){const pId=document.getElementById('mP').value,vId=document.getElementById('mV').value;if(!pId)return;const movs=gD(K.movs)||[];const last=movs.filter(m=>m.tipo==='entrada'&&m.pessoaId===pId&&(!vId||m.veiculoId===vId)).sort((a,b)=>new Date(b.data)-new Date(a.data))[0];if(last&&last.capacetes>0){document.getElementById('capAlert').textContent='⚠️ Entrada com '+last.capacetes+' capacete(s). Conferir devolução!';document.getElementById('capAlert').classList.add('visible');document.getElementById('mCap').value=last.capacetes}else document.getElementById('capAlert').classList.remove('visible')}
+
+function preConfirm(){
+if(!movType){toast('Selecione ENTRADA ou SAÍDA',true);return}
+const pId=document.getElementById('mP').value,fil=document.getElementById('mFil').value;
+if(!pId){toast('Selecione uma pessoa',true);return}
+if(!fil){toast('Selecione a filial',true);return}
+const pessoas=gD(K.pessoas)||[],veics=gD(K.veiculos)||[];
+const p=pessoas.find(x=>x.id===pId),v=veics.find(x=>x.id===document.getElementById('mV').value);
+let html='<div class="confirm-line"><span class="cl">Pessoa</span><span class="cv">'+(p?p.nome:'-')+'</span></div>';
+html+='<div class="confirm-line"><span class="cl">Veículo</span><span class="cv">'+(v?v.placa:'PEDESTRE')+'</span></div>';
+html+='<div class="confirm-line"><span class="cl">Filial</span><span class="cv">'+fil+'</span></div>';
+const nf=document.getElementById('mNF').value.trim(),pr=document.getElementById('mPr').value.trim(),cap=document.getElementById('mCap').value,obs=document.getElementById('mOb').value.trim();
+if(nf)html+='<div class="confirm-line"><span class="cl">NF</span><span class="cv">'+nf+'</span></div>';
+if(pr)html+='<div class="confirm-line"><span class="cl">Protocolo</span><span class="cv">'+pr+'</span></div>';
+if(parseInt(cap)>0)html+='<div class="confirm-line"><span class="cl">Capacetes</span><span class="cv">'+cap+'</span></div>';
+if(obs)html+='<div class="confirm-line"><span class="cl">Obs</span><span class="cv">'+obs+'</span></div>';
+document.getElementById('confirmBody').innerHTML=html;
+openModal('modalConfirm');
 }
 
-function wizNext() {
-  if (wizStep === 1) {
-    if (!document.getElementById('wCompany').value.trim()) { toast('Preencha o nome da empresa', true); return; }
-  }
-  if (wizStep === 2) {
-    const inputs = document.querySelectorAll('.wfil-input');
-    const filiais = [...inputs].map(i => i.value.trim()).filter(Boolean);
-    if (!filiais.length) { toast('Adicione pelo menos 1 filial', true); return; }
-  }
-  if (wizStep === 3) {
-    const l = document.getElementById('wAdmLogin').value.trim();
-    const p = document.getElementById('wAdmPass').value;
-    const p2 = document.getElementById('wAdmPass2').value;
-    if (!l || !p) { toast('Preencha login e senha', true); return; }
-    if (p !== p2) { toast('Senhas não conferem', true); return; }
-  }
-  if (wizStep === wizTotal) {
-    finishWizard();
-    return;
-  }
-  wizStep++;
-  showWizStep();
+function regMov(){
+const mov={id:uid(),tipo:movType,pessoaId:document.getElementById('mP').value,veiculoId:document.getElementById('mV').value||null,tipoPessoa:document.getElementById('mPT').value,filial:document.getElementById('mFil').value,nf:document.getElementById('mNF').value.trim(),protocolo:document.getElementById('mPr').value.trim(),capacetes:parseInt(document.getElementById('mCap').value)||0,obs:document.getElementById('mOb').value.trim(),porteiro:CU.login,data:new Date().toISOString()};
+const movs=gD(K.movs)||[];movs.push(mov);sD(K.movs,movs);
+closeModal('modalConfirm');toast(movType==='entrada'?'Entrada registrada!':'Saída registrada!');clearMov();renderAll()
 }
 
-function wizBack() { if (wizStep > 1) { wizStep--; showWizStep(); } }
+function clearMov(){movType=null;document.getElementById('mBtnE').className='mov-easy-btn';document.getElementById('mBtnS').className='mov-easy-btn';['mPInput','mP','mVInput','mV','mPT','mNF','mPr','mOb'].forEach(id=>document.getElementById(id).value='');document.getElementById('mCap').value='0';document.getElementById('capAlert').classList.remove('visible')}
 
-function addWizFilial() {
-  const d = document.createElement('div');
-  d.className = 'fg';
-  d.innerHTML = '<input type="text" class="wfil-input" placeholder="Nome da filial">';
-  document.getElementById('wFiliais').appendChild(d);
+function renderMovTab(){
+const movs=gD(K.movs)||[],veics=gD(K.veiculos)||[],pessoas=gD(K.pessoas)||[];
+const entradas=movs.filter(m=>m.tipo==='entrada'),saidas=movs.filter(m=>m.tipo==='saida');
+// Pat fora
+const pFora=[];veics.filter(v=>v.tipo==='patrimonio').forEach(p=>{const last=movs.filter(m=>m.veiculoId===p.id).sort((a,b)=>new Date(b.data)-new Date(a.data))[0];if(last&&last.tipo==='saida')pFora.push({mov:last,veiculo:p})});
+document.getElementById('bVO').textContent=pFora.length;
+document.getElementById('voL').innerHTML=pFora.length?pFora.map(x=>'<div class="vehicle-out-item"><div class="info"><div class="plate"><span class="plate-tag">'+x.veiculo.placa+'</span></div><div class="meta">'+(x.veiculo.modelo||'')+' — '+tD(x.mov.data)+'</div></div></div>').join(''):'<div class="empty-state">Nenhum patrimônio fora</div>';
+// Terceiros dentro
+const dentro=[];entradas.forEach(e=>{if(!saidas.find(s=>s.pessoaId===e.pessoaId&&s.veiculoId===e.veiculoId&&new Date(s.data)>new Date(e.data))){const v=veics.find(x=>x.id===e.veiculoId);if(!v||v.tipo!=='patrimonio')dentro.push({...e,veiculo:v})}});
+document.getElementById('bTI').textContent=dentro.length;
+const tiB=document.getElementById('tiB');
+tiB.innerHTML=dentro.length?dentro.map(d=>{const p=pessoas.find(x=>x.id===d.pessoaId);return'<tr><td>'+(d.veiculo?'<span class="plate-tag">'+d.veiculo.placa+'</span>':'<span class="pedestre-tag">PED</span>')+'</td><td>'+(p?p.nome:'-')+'</td><td>'+(d.tipoPessoa||'-')+'</td><td>'+(d.nf||'-')+'</td><td>'+(d.capacetes||0)+'</td><td>'+fD(d.data)+'</td><td class="time-tag">'+tD(d.data)+'</td><td><button class="btn btn-danger btn-sm" onclick="quickSaida(\''+d.id+'\')">Saída</button></td></tr>'}).join(''):'<tr><td colspan="8" class="empty-state">Nenhum terceiro dentro</td></tr>';
 }
 
-function finishWizard() {
-  const filiais = [...document.querySelectorAll('.wfil-input')].map(i => i.value.trim()).filter(Boolean);
-  const config = {
-    company: document.getElementById('wCompany').value.trim(),
-    email: document.getElementById('wEmail').value.trim(),
-    whatsapp: document.getElementById('wWhats').value.trim(),
-    filiais: filiais,
-    setupDone: true
-  };
-  const users = [{
-    id: uid(),
-    login: document.getElementById('wAdmLogin').value.trim(),
-    pass: document.getElementById('wAdmPass').value,
-    nome: 'Administrador',
-    perfil: 'admin',
-    filiais: []
-  }];
-  setData(KEYS.config, config);
-  setData(KEYS.users, users);
-  setData(KEYS.pessoas, []);
-  setData(KEYS.veiculos, []);
-  setData(KEYS.empresas, []);
-  setData(KEYS.movimentos, []);
-  document.getElementById('wizardScreen').style.display = 'none';
-  showLogin();
+function quickSaida(id){const movs=gD(K.movs)||[];const o=movs.find(m=>m.id===id);if(!o)return;movs.push({id:uid(),tipo:'saida',pessoaId:o.pessoaId,veiculoId:o.veiculoId,tipoPessoa:o.tipoPessoa,filial:o.filial,nf:'',protocolo:'',capacetes:o.capacetes,obs:'',porteiro:CU.login,data:new Date().toISOString()});sD(K.movs,movs);toast('Saída registrada!');renderAll()}
+
+// ===== AUTOCOMPLETE =====
+function acP(){const v=document.getElementById('mPInput').value.trim().toLowerCase(),l=document.getElementById('mPList');if(!v){l.classList.remove('open');return}const ps=(gD(K.pessoas)||[]).filter(p=>p.nome.toLowerCase().includes(v)||(p.cpf&&p.cpf.includes(v))).slice(0,8);if(!ps.length){l.classList.remove('open');return}l.innerHTML=ps.map(p=>'<div class="ac-item" onclick="selP(\''+p.id+'\')"><strong>'+p.nome+'</strong><div class="ac-sub">'+(p.cpf||'')+' — '+(p.tipo||'')+'</div></div>').join('');l.classList.add('open')}
+function selP(id){const ps=gD(K.pessoas)||[];const p=ps.find(x=>x.id===id);if(!p)return;document.getElementById('mPInput').value=p.nome;document.getElementById('mP').value=id;document.getElementById('mPT').value=p.tipo||'';document.getElementById('mPList').classList.remove('open');if(movType==='saida')checkCap()}
+function acV(){const v=document.getElementById('mVInput').value.trim().toLowerCase(),l=document.getElementById('mVList');if(!v){l.classList.remove('open');document.getElementById('mV').value='';return}const vs=(gD(K.veiculos)||[]).filter(x=>x.placa.toLowerCase().includes(v)).slice(0,8);if(!vs.length){l.classList.remove('open');return}l.innerHTML=vs.map(x=>'<div class="ac-item" onclick="selV(\''+x.id+'\')"><strong>'+x.placa+'</strong><div class="ac-sub">'+(x.modelo||'')+' — '+x.tipo+'</div></div>').join('');l.classList.add('open')}
+function selV(id){const vs=gD(K.veiculos)||[];const v=vs.find(x=>x.id===id);if(!v)return;document.getElementById('mVInput').value=v.placa;document.getElementById('mV').value=id;document.getElementById('mVList').classList.remove('open')}
+document.addEventListener('click',e=>{if(!e.target.closest('.ac-wrap'))document.querySelectorAll('.ac-list').forEach(l=>l.classList.remove('open'))});
+
+// ===== CADASTRO =====
+function renderPessoas(){const s=(document.getElementById('cpS')?document.getElementById('cpS').value.toLowerCase():'');const ps=(gD(K.pessoas)||[]).filter(p=>!s||p.nome.toLowerCase().includes(s)||(p.cpf&&p.cpf.includes(s)));const veics=gD(K.veiculos)||[];document.getElementById('cpTb').innerHTML=ps.length?ps.map(p=>{const v=veics.find(x=>x.proprietario===p.nome);return'<tr><td>'+p.nome+'</td><td>'+(p.tipo||'-')+'</td><td>'+(p.cpf||'-')+'</td><td>'+(p.empresa||'-')+'</td><td>'+(v?v.placa:'-')+'</td><td><button class="btn btn-danger btn-sm" onclick="delP(\''+p.id+'\')">Excluir</button></td></tr>'}).join(''):'<tr><td colspan="6" class="empty-state">Nenhuma pessoa</td></tr>'}
+function renderVeiculos(){const s=(document.getElementById('cvS')?document.getElementById('cvS').value.toLowerCase():'');const vs=(gD(K.veiculos)||[]).filter(v=>!s||v.placa.toLowerCase().includes(s)||(v.modelo&&v.modelo.toLowerCase().includes(s)));document.getElementById('cvTb').innerHTML=vs.length?vs.map(v=>'<tr><td><span class="plate-tag">'+v.placa+'</span></td><td>'+(v.categoria||'-')+'</td><td>'+v.tipo+'</td><td>'+(v.modelo||'-')+'</td><td>'+(v.proprietario||'-')+'</td><td><button class="btn btn-danger btn-sm" onclick="delV(\''+v.id+'\')">Excluir</button></td></tr>').join(''):'<tr><td colspan="6" class="empty-state">Nenhum veículo</td></tr>'}
+function delP(id){let ps=gD(K.pessoas)||[];sD(K.pessoas,ps.filter(p=>p.id!==id));renderPessoas();toast('Removido')}
+function delV(id){let vs=gD(K.veiculos)||[];sD(K.veiculos,vs.filter(v=>v.id!==id));renderVeiculos();toast('Removido')}
+
+function quickPessoa(){const n=document.getElementById('mpN').value.trim(),c=document.getElementById('mpC').value.trim();if(!n||!c){toast('Nome e CPF obrigatórios',true);return}const ps=gD(K.pessoas)||[];const p={id:uid(),nome:n,cpf:c,tipo:document.getElementById('mpT').value,empresa:document.getElementById('mpE').value.trim()};ps.push(p);sD(K.pessoas,ps);document.getElementById('mPInput').value=n;document.getElementById('mP').value=p.id;document.getElementById('mPT').value=p.tipo;closeModal('modalPessoa');document.getElementById('mpN').value='';document.getElementById('mpC').value='';document.getElementById('mpE').value='';toast('Pessoa criada!')}
+function quickVeiculo(){const pl=document.getElementById('mvPl').value.trim().toUpperCase();if(!pl){toast('Placa obrigatória',true);return}const vs=gD(K.veiculos)||[];const v={id:uid(),placa:pl,categoria:document.getElementById('mvCat').value,modelo:document.getElementById('mvMod').value.trim(),cor:document.getElementById('mvCor').value.trim(),proprietario:document.getElementById('mvProp').value.trim(),tipo:document.getElementById('mvTipo').value};vs.push(v);sD(K.veiculos,vs);document.getElementById('mVInput').value=pl;document.getElementById('mV').value=v.id;closeModal('modalVeiculo');document.getElementById('mvPl').value='';document.getElementById('mvMod').value='';document.getElementById('mvProp').value='';document.getElementById('mvCor').value='';toast('Veículo criado!')}
+
+function cadPessoa(){const n=document.getElementById('cpN').value.trim(),c=document.getElementById('cpC').value.trim();if(!n||!c){toast('Nome e CPF obrigatórios',true);return}const ps=gD(K.pessoas)||[];const emp=document.getElementById('cpEmpTxt').value.trim()||document.getElementById('cpEmp').value;ps.push({id:uid(),nome:n,cpf:c,tipo:document.getElementById('cpT').value,empresa:emp});sD(K.pessoas,ps);
+// Vincular veículo se preenchido
+const vPl=document.getElementById('cpVPl').value.trim().toUpperCase();if(vPl){const vs=gD(K.veiculos)||[];vs.push({id:uid(),placa:vPl,categoria:'veiculo',modelo:document.getElementById('cpVMod').value.trim(),cor:document.getElementById('cpVCor').value.trim(),proprietario:n,tipo:'terceiro'});sD(K.veiculos,vs)}
+closeModal('modalCadPessoa');['cpN','cpC','cpEmpTxt','cpVPl','cpVMod','cpVCor'].forEach(id=>document.getElementById(id).value='');renderPessoas();renderVeiculos();toast('Pessoa cadastrada!')}
+
+function cadVeiculo(){const pl=document.getElementById('cvPl2').value.trim().toUpperCase();if(!pl){toast('Placa obrigatória',true);return}const vs=gD(K.veiculos)||[];vs.push({id:uid(),placa:pl,categoria:document.getElementById('cvCat2').value,modelo:document.getElementById('cvMod2').value.trim(),cor:document.getElementById('cvCor2').value.trim(),proprietario:document.getElementById('cvProp2').value,tipo:document.getElementById('cvTipo2').value,obs:document.getElementById('cvObs2').value.trim()});sD(K.veiculos,vs);closeModal('modalCadVeiculo');['cvPl2','cvMod2','cvCor2','cvObs2'].forEach(id=>document.getElementById(id).value='');renderVeiculos();toast('Veículo cadastrado!')}
+
+// ===== HISTORY =====
+function renderHistory(){
+const movs=gD(K.movs)||[],pessoas=gD(K.pessoas)||[],veics=gD(K.veiculos)||[];
+const fp=document.getElementById('hP').value.toLowerCase(),fpl=document.getElementById('hPl').value.toLowerCase(),fnf=document.getElementById('hNF').value.toLowerCase(),fprot=document.getElementById('hProt').value.toLowerCase(),ffil=document.getElementById('hFil').value,fde=document.getElementById('hDe').value,fate=document.getElementById('hAte').value,fdir=document.getElementById('hDir').value;
+let filtered=movs.filter(m=>{
+if(fdir&&m.tipo!==fdir)return false;if(ffil&&m.filial!==ffil)return false;
+if(fnf&&!(m.nf||'').toLowerCase().includes(fnf))return false;
+if(fprot&&!(m.protocolo||'').toLowerCase().includes(fprot))return false;
+if(fde&&m.data<fde)return false;if(fate&&m.data>fate+'T23:59:59')return false;
+if(fp){const p=pessoas.find(x=>x.id===m.pessoaId);if(!p||(!p.nome.toLowerCase().includes(fp)&&!(p.cpf||'').includes(fp)))return false}
+if(fpl){const v=veics.find(x=>x.id===m.veiculoId);if(!v||!v.placa.toLowerCase().includes(fpl))return false}
+return true
+}).sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,300);
+if(CU.perfil!=='admin')filtered=filtered.filter(m=>m.porteiro===CU.login);
+document.getElementById('hTb').innerHTML=filtered.length?filtered.map(m=>{const p=pessoas.find(x=>x.id===m.pessoaId);const v=veics.find(x=>x.id===m.veiculoId);return'<tr><td>'+fD(m.data)+'</td><td><span class="status-badge '+(m.tipo==='entrada'?'in':'out')+'">'+m.tipo.toUpperCase()+'</span></td><td>'+(p?p.nome:'-')+'</td><td>'+(p?p.tipo:'-')+'</td><td>'+(v?v.placa:'PEDESTRE')+'</td><td>'+(m.nf||'-')+'</td><td style="font-weight:700">'+(m.protocolo||'-')+'</td><td>'+(m.filial||'-')+'</td><td>'+(m.capacetes||0)+'</td><td>'+(m.obs||'-')+'</td><td>'+(m.porteiro||'-')+'</td><td><button class="btn btn-outline btn-sm" onclick="editHist(\''+m.id+'\')">✏️</button></td></tr>'}).join(''):'<tr><td colspan="12" class="empty-state">Nenhum registro</td></tr>'
 }
+function clearFilters(){['hP','hPl','hNF','hProt','hDe','hAte'].forEach(id=>document.getElementById(id).value='');document.getElementById('hFil').value='';document.getElementById('hDir').value='';renderHistory()}
+function editHist(id){const movs=gD(K.movs)||[];const m=movs.find(x=>x.id===id);if(!m)return;const d=new Date(m.data);document.getElementById('ehId').value=id;document.getElementById('ehDt').value=d.toISOString().slice(0,10);document.getElementById('ehTm').value=d.toTimeString().slice(0,5);document.getElementById('ehDir').value=m.tipo;document.getElementById('ehCap').value=m.capacetes||0;document.getElementById('ehFil').value=m.filial||'';document.getElementById('ehNF').value=m.nf||'';document.getElementById('ehProt').value=m.protocolo||'';document.getElementById('ehObs').value=m.obs||'';openModal('modalEditHist')}
+function saveEditHist(){const movs=gD(K.movs)||[];const i=movs.findIndex(x=>x.id===document.getElementById('ehId').value);if(i<0)return;movs[i].data=new Date(document.getElementById('ehDt').value+'T'+document.getElementById('ehTm').value+':00').toISOString();movs[i].tipo=document.getElementById('ehDir').value;movs[i].capacetes=parseInt(document.getElementById('ehCap').value)||0;movs[i].filial=document.getElementById('ehFil').value;movs[i].nf=document.getElementById('ehNF').value.trim();movs[i].protocolo=document.getElementById('ehProt').value.trim();movs[i].obs=document.getElementById('ehObs').value.trim();sD(K.movs,movs);closeModal('modalEditHist');renderAll();toast('Registro atualizado!')}
+function exportCSV(){const movs=gD(K.movs)||[],pessoas=gD(K.pessoas)||[],veics=gD(K.veiculos)||[];let csv='Data,Tipo,Pessoa,CPF,Veiculo,Filial,NF,Protocolo,Capacetes,Obs,Porteiro\n';movs.sort((a,b)=>new Date(b.data)-new Date(a.data)).forEach(m=>{const p=pessoas.find(x=>x.id===m.pessoaId);const v=veics.find(x=>x.id===m.veiculoId);csv+=[fD(m.data),m.tipo,p?p.nome:'',p?p.cpf:'',v?v.placa:'PEDESTRE',m.filial,m.nf,m.protocolo,m.capacetes,m.obs,m.porteiro].join(',')+'\n'});dlFile(csv,'historico_portaria.csv','text/csv')}
 
-// ===================== LOGIN =====================
-let currentUser = null;
-
-function showLogin() {
-  const cfg = getData(KEYS.config);
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginCompany').textContent = cfg.company;
-  const hb = document.getElementById('helpBox');
-  let html = '';
-  if (cfg.email) html += '📧 <a href="mailto:' + cfg.email + '">' + cfg.email + '</a><br>';
-  if (cfg.whatsapp) html += '📱 <a href="https://wa.me/' + cfg.whatsapp.replace(/\D/g, '') + '">' + cfg.whatsapp + '</a>';
-  hb.innerHTML = html || 'Contate o administrador do sistema.';
+// ===== ADMIN =====
+function renderAdmin(){
+const cfg=gD(K.cfg)||{};document.getElementById('cfgN').value=cfg.company||'';document.getElementById('cfgE').value=cfg.email||'';document.getElementById('cfgW').value=cfg.whatsapp||'';
+// Users
+const users=gD(K.users)||[];document.getElementById('auTb').innerHTML=users.map(u=>'<tr><td>'+(u.nome||'-')+'</td><td>'+u.login+'</td><td>'+(u.email||'-')+'</td><td>'+u.perfil+'</td><td>'+(u.filiais&&u.filiais.length?u.filiais.join(', '):'Todas')+'</td><td><button class="btn btn-outline btn-sm" onclick="resetPassModal(\''+u.id+'\')">🔑</button> <button class="btn btn-danger btn-sm" onclick="delUser(\''+u.id+'\')">Excluir</button></td></tr>').join('');
+// Filial checks
+const auF=document.getElementById('auFil');auF.innerHTML=(cfg.filiais||[]).map(f=>'<label class="filial-check"><input type="checkbox" value="'+f+'"> '+f+'</label>').join('');
+// Empresas
+const emps=gD(K.empresas)||[];document.getElementById('efTb').innerHTML=emps.map(e=>'<tr><td>'+e.nome+'</td><td>'+(e.cnpj||'-')+'</td><td>'+(e.tipo||'-')+'</td><td>'+(e.telefone||'-')+'</td><td><button class="btn btn-danger btn-sm" onclick="delEmp(\''+e.id+'\')">Excluir</button></td></tr>').join('')||'<tr><td colspan="5" class="empty-state">Nenhuma empresa</td></tr>';
+// Prop select
+const cvP2=document.getElementById('cvProp2');if(cvP2){const pessoas=gD(K.pessoas)||[];cvP2.innerHTML='<option value="">Nenhum</option>'+pessoas.map(p=>'<option value="'+p.nome+'">'+p.nome+'</option>').join('')}
+// Emp select cadastro
+const cpE=document.getElementById('cpEmp');if(cpE){cpE.innerHTML='<option value="">Nenhuma</option>'+emps.map(e=>'<option value="'+e.nome+'">'+e.nome+'</option>').join('')}
 }
-
-function doLogin() {
-  const l = document.getElementById('lU').value.trim();
-  const p = document.getElementById('lP').value;
-  const users = getData(KEYS.users) || [];
-  const u = users.find(x => x.login === l && x.pass === p);
-  if (!u) {
-    document.getElementById('lErr').style.display = 'block';
-    document.getElementById('lErr').textContent = 'Usuário ou senha incorretos';
-    return;
-  }
-  currentUser = u;
-  document.getElementById('loginScreen').style.display = 'none';
-  startApp();
-}
-
-function logout() {
-  currentUser = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('lU').value = '';
-  document.getElementById('lP').value = '';
-  document.getElementById('lErr').style.display = 'none';
-}
-
-// ===================== APP INIT =====================
-function startApp() {
-  const cfg = getData(KEYS.config);
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('appTitle').textContent = cfg.company;
-  document.getElementById('uName').textContent = currentUser.nome || currentUser.login;
-  document.getElementById('uFilial').textContent = currentUser.filiais && currentUser.filiais.length ? currentUser.filiais.join(', ') : 'Todas';
-  if (currentUser.perfil === 'admin') {
-    document.getElementById('adminTab').style.display = '';
-  } else {
-    document.getElementById('adminTab').style.display = 'none';
-  }
-  populateFilialSelects();
-  renderDashboard();
-  renderMovTab();
-  renderPessoas();
-  renderVeiculos();
-  renderEmpresas();
-  renderHistory();
-  if (currentUser.perfil === 'admin') renderAdmin();
-}
-
-// ===================== NAVIGATION =====================
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('nav-tab')) {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    e.target.classList.add('active');
-    const tab = e.target.dataset.tab;
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-  }
-});
-
-function showSub(btn, id) {
-  btn.parentElement.querySelectorAll('.sub-tab').forEach(s => s.classList.remove('active'));
-  btn.classList.add('active');
-  ['cPessoa', 'cVeiculo', 'cEmpresa', 'cPatrimonio'].forEach(x => {
-    const el = document.getElementById(x);
-    if (el) el.style.display = x === id ? '' : 'none';
-  });
-}
-
-// ===================== FILIAIS HELPERS =====================
-function getFiliais() { return (getData(KEYS.config) || {}).filiais || []; }
-function canSeeFilial(f) {
-  if (!currentUser) return false;
-  if (!currentUser.filiais || !currentUser.filiais.length) return true;
-  return currentUser.filiais.includes(f);
-}
-function populateFilialSelects() {
-  const fils = getFiliais();
-  const selects = [document.getElementById('mFil'), document.getElementById('hFil')];
-  selects.forEach(sel => {
-    if (!sel) return;
-    const isFilter = sel.id === 'hFil';
-    sel.innerHTML = isFilter ? '<option value="">Todas</option>' : '';
-    fils.forEach(f => {
-      if (canSeeFilial(f)) sel.innerHTML += '<option value="' + f + '">' + f + '</option>';
-    });
-  });
-  // Default filial
-  const mf = document.getElementById('mFil');
-  if (mf && currentUser && currentUser.filiais && currentUser.filiais.length === 1) mf.value = currentUser.filiais[0];
-}
-
-// ===================== DASHBOARD =====================
-function renderDashboard() {
-  const movs = getData(KEYS.movimentos) || [];
-  const veics = getData(KEYS.veiculos) || [];
-  const today = new Date().toISOString().slice(0, 10);
-
-  // Terceiros dentro: last entrada sem saída correspondente
-  const dentro = [];
-  const fora = [];
-  const entradas = movs.filter(m => m.tipo === 'entrada');
-  const saidas = movs.filter(m => m.tipo === 'saida');
-
-  entradas.forEach(e => {
-    const hasSaida = saidas.find(s => s.pessoaId === e.pessoaId && s.veiculoId === e.veiculoId && new Date(s.data) > new Date(e.data));
-    if (!hasSaida) {
-      const v = veics.find(x => x.id === e.veiculoId);
-      if (!v || v.tipo !== 'patrimonio') dentro.push({ ...e, veiculo: v });
-    }
-  });
-
-  // Patrimônio fora
-  const patrimonios = veics.filter(v => v.tipo === 'patrimonio');
-  patrimonios.forEach(p => {
-    const lastMov = movs.filter(m => m.veiculoId === p.id).sort((a, b) => new Date(b.data) - new Date(a.data))[0];
-    if (lastMov && lastMov.tipo === 'saida') fora.push({ ...lastMov, veiculo: p });
-  });
-
-  const todayMovs = movs.filter(m => m.data && m.data.startsWith(today));
-  const eHoje = todayMovs.filter(m => m.tipo === 'entrada').length;
-  const sHoje = todayMovs.filter(m => m.tipo === 'saida').length;
-
-  document.getElementById('dVD').textContent = dentro.length;
-  document.getElementById('dVF').textContent = fora.length;
-  document.getElementById('dEH').textContent = eHoje;
-  document.getElementById('dSH').textContent = sHoje;
-  document.getElementById('dVDB').textContent = dentro.length;
-  document.getElementById('dVFB').textContent = fora.length;
-
-  const pessoas = getData(KEYS.pessoas) || [];
-  const tbD = document.getElementById('dTbDentro');
-  tbD.innerHTML = dentro.length ? dentro.map(d => {
-    const p = pessoas.find(x => x.id === d.pessoaId);
-    return '<tr><td>' + (d.veiculo ? '<span class="plate-tag">' + d.veiculo.placa + '</span>' : '<span class="pedestre-tag">PEDESTRE</span>') + '</td><td>' + (d.veiculo ? d.veiculo.modelo || '-' : '-') + '</td><td>' + (p ? p.nome : '-') + '</td><td>' + (d.tipoPessoa || '-') + '</td><td><span class="filial-tag">' + (d.filial || '-') + '</span></td><td>' + fmtDate(d.data) + '</td><td class="time-tag">' + tempoDesde(d.data) + '</td></tr>';
-  }).join('') : '<tr><td colspan="7" class="empty-state">Nenhum terceiro dentro no momento</td></tr>';
-
-  const tbF = document.getElementById('dTbFora');
-  tbF.innerHTML = fora.length ? fora.map(d => {
-    const p = pessoas.find(x => x.id === d.pessoaId);
-    return '<tr><td><span class="plate-tag">' + (d.veiculo ? d.veiculo.placa : '-') + '</span></td><td>' + (d.veiculo ? d.veiculo.modelo || '-' : '-') + '</td><td>' + (p ? p.nome : '-') + '</td><td><span class="filial-tag">' + (d.filial || '-') + '</span></td><td>' + fmtDate(d.data) + '</td><td class="time-tag">' + tempoDesde(d.data) + '</td></tr>';
-  }).join('') : '<tr><td colspan="6" class="empty-state">Nenhum patrimônio fora</td></tr>';
-}
-
-// ===================== MOVEMENT TAB =====================
-let movType = null;
-
-function setMT(t) {
-  movType = t;
-  document.getElementById('mBtnE').className = 'mov-easy-btn' + (t === 'entrada' ? ' sel-e' : '');
-  document.getElementById('mBtnS').className = 'mov-easy-btn' + (t === 'saida' ? ' sel-s' : '');
-  // Check capacetes alert on saída
-  if (t === 'saida') checkCapAlert();
-  else document.getElementById('capAlert').classList.remove('visible');
-}
-
-function checkCapAlert() {
-  const pId = document.getElementById('mP').value;
-  const vId = document.getElementById('mV').value;
-  if (!pId) return;
-  const movs = getData(KEYS.movimentos) || [];
-  const lastE = movs.filter(m => m.tipo === 'entrada' && m.pessoaId === pId && (!vId || m.veiculoId === vId)).sort((a, b) => new Date(b.data) - new Date(a.data))[0];
-  if (lastE && lastE.capacetes > 0) {
-    document.getElementById('capAlert').textContent = '⚠️ Atenção: entrada registrada com ' + lastE.capacetes + ' capacete(s). Conferir devolução!';
-    document.getElementById('capAlert').classList.add('visible');
-    document.getElementById('mCap').value = lastE.capacetes;
-  } else {
-    document.getElementById('capAlert').classList.remove('visible');
-  }
-}
-
-function regMov() {
-  if (!movType) { toast('Selecione ENTRADA ou SAÍDA', true); return; }
-  const pId = document.getElementById('mP').value;
-  const filial = document.getElementById('mFil').value;
-  if (!pId) { toast('Selecione uma pessoa', true); return; }
-  if (!filial) { toast('Selecione a filial', true); return; }
-
-  const mov = {
-    id: uid(),
-    tipo: movType,
-    pessoaId: pId,
-    veiculoId: document.getElementById('mV').value || null,
-    tipoPessoa: document.getElementById('mPT').value,
-    filial: filial,
-    nf: document.getElementById('mNF').value.trim(),
-    protocolo: document.getElementById('mPr').value.trim(),
-    capacetes: parseInt(document.getElementById('mCap').value) || 0,
-    obs: document.getElementById('mOb').value.trim(),
-    porteiro: currentUser.login,
-    data: new Date().toISOString()
-  };
-
-  const movs = getData(KEYS.movimentos) || [];
-  movs.push(mov);
-  setData(KEYS.movimentos, movs);
-  toast('Movimentação registrada!');
-  clearMovForm();
-  renderDashboard();
-  renderMovTab();
-}
-
-function clearMovForm() {
-  movType = null;
-  document.getElementById('mBtnE').className = 'mov-easy-btn';
-  document.getElementById('mBtnS').className = 'mov-easy-btn';
-  document.getElementById('mPInput').value = '';
-  document.getElementById('mP').value = '';
-  document.getElementById('mVInput').value = '';
-  document.getElementById('mV').value = '';
-  document.getElementById('mPT').value = '';
-  document.getElementById('mNF').value = '';
-  document.getElementById('mPr').value = '';
-  document.getElementById('mCap').value = '0';
-  document.getElementById('mOb').value = '';
-  document.getElementById('capAlert').classList.remove('visible');
-}
-
-function renderMovTab() {
-  const movs = getData(KEYS.movimentos) || [];
-  const veics = getData(KEYS.veiculos) || [];
-  const pessoas = getData(KEYS.pessoas) || [];
-
-  // Patrimônio fora
-  const patrimonios = veics.filter(v => v.tipo === 'patrimonio');
-  const pFora = [];
-  patrimonios.forEach(p => {
-    const lastMov = movs.filter(m => m.veiculoId === p.id).sort((a, b) => new Date(b.data) - new Date(a.data))[0];
-    if (lastMov && lastMov.tipo === 'saida') pFora.push({ mov: lastMov, veiculo: p });
-  });
-  document.getElementById('bVO').textContent = pFora.length;
-  const voL = document.getElementById('voL');
-  voL.innerHTML = pFora.length ? pFora.map(x => '<div class="vehicle-out-item"><div class="info"><div class="plate"><span class="plate-tag">' + x.veiculo.placa + '</span></div><div class="meta">' + (x.veiculo.modelo || '') + ' — ' + tempoDesde(x.mov.data) + '</div></div></div>').join('') : '<div class="empty-state">Nenhum patrimônio fora</div>';
-
-  // Terceiros dentro
-  const entradas = movs.filter(m => m.tipo === 'entrada');
-  const saidas = movs.filter(m => m.tipo === 'saida');
-  const dentro = [];
-  entradas.forEach(e => {
-    const hasSaida = saidas.find(s => s.pessoaId === e.pessoaId && s.veiculoId === e.veiculoId && new Date(s.data) > new Date(e.data));
-    if (!hasSaida) {
-      const v = veics.find(x => x.id === e.veiculoId);
-      if (!v || v.tipo !== 'patrimonio') dentro.push({ ...e, veiculo: v });
-    }
-  });
-  document.getElementById('bTI').textContent = dentro.length;
-  const tiB = document.getElementById('tiB');
-  tiB.innerHTML = dentro.length ? dentro.map(d => {
-    const p = pessoas.find(x => x.id === d.pessoaId);
-    return '<tr><td>' + (d.veiculo ? '<span class="plate-tag">' + d.veiculo.placa + '</span>' : '<span class="pedestre-tag">PEDESTRE</span>') + '</td><td>' + (p ? p.nome : '-') + '</td><td>' + (d.tipoPessoa || '-') + '</td><td>' + (d.nf || '-') + '</td><td>' + (d.capacetes || 0) + '</td><td>' + fmtDate(d.data) + '</td><td class="time-tag">' + tempoDesde(d.data) + '</td><td><button class="btn btn-danger btn-sm" onclick="quickSaida(\'' + d.id + '\')">Saída</button></td></tr>';
-  }).join('') : '<tr><td colspan="8" class="empty-state">Nenhum terceiro dentro</td></tr>';
-}
-
-function quickSaida(movId) {
-  const movs = getData(KEYS.movimentos) || [];
-  const orig = movs.find(m => m.id === movId);
-  if (!orig) return;
-  const saida = {
-    id: uid(),
-    tipo: 'saida',
-    pessoaId: orig.pessoaId,
-    veiculoId: orig.veiculoId,
-    tipoPessoa: orig.tipoPessoa,
-    filial: orig.filial,
-    nf: '', protocolo: '', capacetes: orig.capacetes, obs: '',
-    porteiro: currentUser.login,
-    data: new Date().toISOString()
-  };
-  movs.push(saida);
-  setData(KEYS.movimentos, movs);
-  toast('Saída registrada!');
-  renderDashboard();
-  renderMovTab();
-}
-
-// ===================== AUTOCOMPLETE =====================
-function acPessoa() {
-  const val = document.getElementById('mPInput').value.trim().toLowerCase();
-  const list = document.getElementById('mPList');
-  if (!val) { list.classList.remove('open'); return; }
-  const pessoas = getData(KEYS.pessoas) || [];
-  const filtered = pessoas.filter(p => p.nome.toLowerCase().includes(val) || (p.cpf && p.cpf.includes(val))).slice(0, 8);
-  if (!filtered.length) { list.classList.remove('open'); return; }
-  list.innerHTML = filtered.map(p => '<div class="ac-item" onclick="selectPessoa(\'' + p.id + '\')"><strong>' + p.nome + '</strong><div class="ac-sub">' + (p.cpf || '') + ' — ' + (p.tipo || '') + '</div></div>').join('');
-  list.classList.add('open');
-}
-
-function selectPessoa(id) {
-  const pessoas = getData(KEYS.pessoas) || [];
-  const p = pessoas.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('mPInput').value = p.nome;
-  document.getElementById('mP').value = id;
-  document.getElementById('mPT').value = p.tipo || '';
-  document.getElementById('mPList').classList.remove('open');
-  if (movType === 'saida') checkCapAlert();
-}
-
-function acVeiculo() {
-  const val = document.getElementById('mVInput').value.trim().toLowerCase();
-  const list = document.getElementById('mVList');
-  if (!val) { list.classList.remove('open'); document.getElementById('mV').value = ''; return; }
-  const veics = getData(KEYS.veiculos) || [];
-  const filtered = veics.filter(v => v.placa.toLowerCase().includes(val)).slice(0, 8);
-  if (!filtered.length) { list.classList.remove('open'); return; }
-  list.innerHTML = filtered.map(v => '<div class="ac-item" onclick="selectVeiculo(\'' + v.id + '\')"><strong>' + v.placa + '</strong><div class="ac-sub">' + (v.modelo || '') + ' — ' + v.tipo + '</div></div>').join('');
-  list.classList.add('open');
-}
-
-function selectVeiculo(id) {
-  const veics = getData(KEYS.veiculos) || [];
-  const v = veics.find(x => x.id === id);
-  if (!v) return;
-  document.getElementById('mVInput').value = v.placa;
-  document.getElementById('mV').value = id;
-  document.getElementById('mVList').classList.remove('open');
-}
-
-// Close autocomplete on click outside
-document.addEventListener('click', e => {
-  if (!e.target.closest('.ac-wrap')) {
-    document.querySelectorAll('.ac-list').forEach(l => l.classList.remove('open'));
-  }
-});
-
-// ===================== CADASTRO: PESSOAS =====================
-function savePessoa() {
-  const nome = document.getElementById('cpNome').value.trim();
-  const cpf = document.getElementById('cpCPF').value.trim();
-  if (!nome || !cpf) { toast('Nome e CPF obrigatórios', true); return; }
-  if (!validaCPF(cpf)) { toast('CPF inválido', true); return; }
-  const pessoas = getData(KEYS.pessoas) || [];
-  pessoas.push({
-    id: uid(), nome, cpf,
-    tipo: document.getElementById('cpTipo').value,
-    empresa: document.getElementById('cpEmpresa').value.trim(),
-    telefone: document.getElementById('cpTel').value.trim()
-  });
-  setData(KEYS.pessoas, pessoas);
-  toast('Pessoa cadastrada!');
-  document.getElementById('cpNome').value = '';
-  document.getElementById('cpCPF').value = '';
-  document.getElementById('cpEmpresa').value = '';
-  document.getElementById('cpTel').value = '';
-  renderPessoas();
-}
-
-function renderPessoas() {
-  const search = (document.getElementById('cpSearch') ? document.getElementById('cpSearch').value.toLowerCase() : '');
-  const pessoas = (getData(KEYS.pessoas) || []).filter(p => !search || p.nome.toLowerCase().includes(search) || (p.cpf && p.cpf.includes(search)));
-  const tb = document.getElementById('cpTb');
-  tb.innerHTML = pessoas.map(p => '<tr><td>' + p.nome + '</td><td>' + (p.cpf || '-') + '</td><td>' + (p.tipo || '-') + '</td><td>' + (p.empresa || '-') + '</td><td><button class="btn btn-danger btn-sm" onclick="delPessoa(\'' + p.id + '\')">Excluir</button></td></tr>').join('') || '<tr><td colspan="5" class="empty-state">Nenhuma pessoa cadastrada</td></tr>';
-}
-
-function delPessoa(id) {
-  let pessoas = getData(KEYS.pessoas) || [];
-  pessoas = pessoas.filter(p => p.id !== id);
-  setData(KEYS.pessoas, pessoas);
-  renderPessoas();
-  toast('Pessoa removida');
-}
-
-// ===================== CADASTRO: VEÍCULOS =====================
-document.getElementById('cvTipo').addEventListener('change', function() {
-  document.getElementById('cvFilialWrap').style.display = this.value === 'patrimonio' ? '' : 'none';
-  if (this.value === 'patrimonio') {
-    const sel = document.getElementById('cvFilial');
-    sel.innerHTML = getFiliais().map(f => '<option>' + f + '</option>').join('');
-  }
-});
-document.getElementById('cvCat').addEventListener('change', function() {
-  const placaInput = document.getElementById('cvPlaca');
-  if (this.value === 'maquina' || this.value === 'bicicleta') {
-    placaInput.placeholder = 'Identificação';
-  } else {
-    placaInput.placeholder = 'ABC-1234';
-  }
-});
-
-function saveVeiculo() {
-  const placa = document.getElementById('cvPlaca').value.trim().toUpperCase();
-  if (!placa) { toast('Placa/identificação obrigatória', true); return; }
-  const cat = document.getElementById('cvCat').value;
-  if (cat === 'veiculo' && !validaPlaca(placa)) { toast('Placa inválida', true); return; }
-  const veics = getData(KEYS.veiculos) || [];
-  const v = {
-    id: uid(), placa, categoria: cat,
-    modelo: document.getElementById('cvModelo').value.trim(),
-    cor: document.getElementById('cvCor').value.trim(),
-    proprietario: document.getElementById('cvProp').value.trim(),
-    tipo: document.getElementById('cvTipo').value,
-    filial: document.getElementById('cvTipo').value === 'patrimonio' ? document.getElementById('cvFilial').value : null
-  };
-  veics.push(v);
-  setData(KEYS.veiculos, veics);
-  toast('Veículo cadastrado!');
-  document.getElementById('cvPlaca').value = '';
-  document.getElementById('cvModelo').value = '';
-  document.getElementById('cvCor').value = '';
-  document.getElementById('cvProp').value = '';
-  renderVeiculos();
-}
-
-function renderVeiculos() {
-  const search = (document.getElementById('cvSearch') ? document.getElementById('cvSearch').value.toLowerCase() : '');
-  const veics = (getData(KEYS.veiculos) || []).filter(v => !search || v.placa.toLowerCase().includes(search) || (v.modelo && v.modelo.toLowerCase().includes(search)));
-  const tb = document.getElementById('cvTb');
-  tb.innerHTML = veics.map(v => '<tr><td><span class="plate-tag">' + v.placa + '</span></td><td>' + (v.categoria || '-') + '</td><td>' + (v.modelo || '-') + '</td><td>' + (v.cor || '-') + '</td><td>' + v.tipo + '</td><td>' + (v.proprietario || '-') + '</td><td><button class="btn btn-danger btn-sm" onclick="delVeiculo(\'' + v.id + '\')">Excluir</button></td></tr>').join('') || '<tr><td colspan="7" class="empty-state">Nenhum veículo cadastrado</td></tr>';
-}
-
-function delVeiculo(id) {
-  let veics = getData(KEYS.veiculos) || [];
-  veics = veics.filter(v => v.id !== id);
-  setData(KEYS.veiculos, veics);
-  renderVeiculos();
-  toast('Veículo removido');
-}
-
-// ===================== CADASTRO: EMPRESAS =====================
-function saveEmpresa() {
-  const nome = document.getElementById('ceNome').value.trim();
-  if (!nome) { toast('Nome obrigatório', true); return; }
-  const cnpj = document.getElementById('ceCNPJ').value.trim();
-  if (cnpj && !validaCNPJ(cnpj)) { toast('CNPJ inválido', true); return; }
-  const empresas = getData(KEYS.empresas) || [];
-  empresas.push({ id: uid(), nome, cnpj });
-  setData(KEYS.empresas, empresas);
-  toast('Empresa cadastrada!');
-  document.getElementById('ceNome').value = '';
-  document.getElementById('ceCNPJ').value = '';
-  renderEmpresas();
-}
-
-function renderEmpresas() {
-  const empresas = getData(KEYS.empresas) || [];
-  const tb = document.getElementById('ceTb');
-  tb.innerHTML = empresas.map(e => '<tr><td>' + e.nome + '</td><td>' + (e.cnpj || '-') + '</td><td><button class="btn btn-danger btn-sm" onclick="delEmpresa(\'' + e.id + '\')">Excluir</button></td></tr>').join('') || '<tr><td colspan="3" class="empty-state">Nenhuma empresa</td></tr>';
-}
-
-function delEmpresa(id) {
-  let empresas = getData(KEYS.empresas) || [];
-  empresas = empresas.filter(e => e.id !== id);
-  setData(KEYS.empresas, empresas);
-  renderEmpresas();
-  toast('Empresa removida');
-}
-
-// ===================== HISTORY =====================
-function renderHistory() {
-  const movs = getData(KEYS.movimentos) || [];
-  const pessoas = getData(KEYS.pessoas) || [];
-  const veics = getData(KEYS.veiculos) || [];
-  const de = document.getElementById('hDe').value;
-  const ate = document.getElementById('hAte').value;
-  const tipo = document.getElementById('hTipo').value;
-  const filial = document.getElementById('hFil').value;
-
-  let filtered = movs.filter(m => {
-    if (tipo && m.tipo !== tipo) return false;
-    if (filial && m.filial !== filial) return false;
-    if (de && m.data < de) return false;
-    if (ate && m.data < ate + 'T00:00' === false && m.data > ate + 'T23:59:59') return false;
-    return true;
-  }).sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 200);
-
-  // Permission: porteiro only sees own records
-  if (currentUser.perfil !== 'admin') {
-    filtered = filtered.filter(m => m.porteiro === currentUser.login);
-  }
-
-  const tb = document.getElementById('hTb');
-  tb.innerHTML = filtered.map(m => {
-    const p = pessoas.find(x => x.id === m.pessoaId);
-    const v = veics.find(x => x.id === m.veiculoId);
-    return '<tr><td>' + fmtDate(m.data) + '</td><td><span class="status-badge ' + (m.tipo === 'entrada' ? 'in' : 'out') + '">' + m.tipo.toUpperCase() + '</span></td><td>' + (p ? p.nome : '-') + '</td><td>' + (v ? v.placa : 'PEDESTRE') + '</td><td>' + (m.filial || '-') + '</td><td>' + (m.nf || '-') + '</td><td>' + (m.capacetes || 0) + '</td><td>' + (m.obs || '-') + '</td><td>' + (m.porteiro || '-') + '</td><td><button class="btn btn-outline btn-sm" onclick="editHist(\'' + m.id + '\')">✏️</button></td></tr>';
-  }).join('') || '<tr><td colspan="10" class="empty-state">Nenhum registro encontrado</td></tr>';
-}
-
-function editHist(id) {
-  const movs = getData(KEYS.movimentos) || [];
-  const m = movs.find(x => x.id === id);
-  if (!m) return;
-  document.getElementById('ehId').value = id;
-  const d = new Date(m.data);
-  document.getElementById('ehDate').value = d.toISOString().slice(0, 10);
-  document.getElementById('ehTime').value = d.toTimeString().slice(0, 5);
-  document.getElementById('ehNF').value = m.nf || '';
-  document.getElementById('ehProt').value = m.protocolo || '';
-  document.getElementById('ehCap').value = m.capacetes || 0;
-  document.getElementById('ehObs').value = m.obs || '';
-  openModal('modalEditHist');
-}
-
-function saveEditHist() {
-  const id = document.getElementById('ehId').value;
-  const movs = getData(KEYS.movimentos) || [];
-  const idx = movs.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  const dateStr = document.getElementById('ehDate').value + 'T' + document.getElementById('ehTime').value + ':00';
-  movs[idx].data = new Date(dateStr).toISOString();
-  movs[idx].nf = document.getElementById('ehNF').value.trim();
-  movs[idx].protocolo = document.getElementById('ehProt').value.trim();
-  movs[idx].capacetes = parseInt(document.getElementById('ehCap').value) || 0;
-  movs[idx].obs = document.getElementById('ehObs').value.trim();
-  setData(KEYS.movimentos, movs);
-  closeModal('modalEditHist');
-  renderHistory();
-  toast('Registro atualizado!');
-}
-
-function exportCSV() {
-  const movs = getData(KEYS.movimentos) || [];
-  const pessoas = getData(KEYS.pessoas) || [];
-  const veics = getData(KEYS.veiculos) || [];
-  let csv = 'Data,Tipo,Pessoa,CPF,Veiculo,Filial,NF,Protocolo,Capacetes,Obs,Porteiro\n';
-  movs.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach(m => {
-    const p = pessoas.find(x => x.id === m.pessoaId);
-    const v = veics.find(x => x.id === m.veiculoId);
-    csv += [fmtDate(m.data), m.tipo, p ? p.nome : '', p ? p.cpf : '', v ? v.placa : 'PEDESTRE', m.filial, m.nf, m.protocolo, m.capacetes, m.obs, m.porteiro].join(',') + '\n';
-  });
-  downloadFile(csv, 'historico_portaria.csv', 'text/csv');
-}
-
-// ===================== ADMIN =====================
-function renderAdmin() {
-  const cfg = getData(KEYS.config) || {};
-  document.getElementById('cfgCompany').value = cfg.company || '';
-  document.getElementById('cfgEmail').value = cfg.email || '';
-  document.getElementById('cfgWhats').value = cfg.whatsapp || '';
-
-  // Filiais
-  const cfgF = document.getElementById('cfgFiliais');
-  cfgF.innerHTML = (cfg.filiais || []).map((f, i) => '<div class="fg" style="margin-bottom:6px"><input type="text" class="cfg-fil-input" value="' + f + '"></div>').join('');
-
-  // Users
-  const users = getData(KEYS.users) || [];
-  const auTb = document.getElementById('auTb');
-  auTb.innerHTML = users.map(u => '<tr><td>' + u.login + '</td><td>' + (u.nome || '-') + '</td><td>' + u.perfil + '</td><td>' + (u.filiais && u.filiais.length ? u.filiais.join(', ') : 'Todas') + '</td><td><button class="btn btn-danger btn-sm" onclick="delUser(\'' + u.id + '\')">Excluir</button></td></tr>').join('');
-
-  // Filial checkboxes for new user
-  const auF = document.getElementById('auFiliais');
-  auF.innerHTML = (cfg.filiais || []).map(f => '<label class="filial-check"><input type="checkbox" value="' + f + '"> ' + f + '</label>').join('');
-}
-
-function saveConfig() {
-  const cfg = getData(KEYS.config) || {};
-  cfg.company = document.getElementById('cfgCompany').value.trim();
-  cfg.email = document.getElementById('cfgEmail').value.trim();
-  cfg.whatsapp = document.getElementById('cfgWhats').value.trim();
-  setData(KEYS.config, cfg);
-  document.getElementById('appTitle').textContent = cfg.company;
-  toast('Configurações salvas!');
-}
-
-function addFilialCfg() {
-  const c = document.getElementById('cfgFiliais');
-  const d = document.createElement('div');
-  d.className = 'fg';
-  d.style.marginBottom = '6px';
-  d.innerHTML = '<input type="text" class="cfg-fil-input" placeholder="Nova filial">';
-  c.appendChild(d);
-}
-
-function saveFiliais() {
-  const cfg = getData(KEYS.config) || {};
-  cfg.filiais = [...document.querySelectorAll('.cfg-fil-input')].map(i => i.value.trim()).filter(Boolean);
-  setData(KEYS.config, cfg);
-  populateFilialSelects();
-  renderAdmin();
-  toast('Filiais atualizadas!');
-}
-
-function saveUser() {
-  const login = document.getElementById('auLogin').value.trim();
-  const pass = document.getElementById('auPass').value;
-  if (!login || !pass) { toast('Login e senha obrigatórios', true); return; }
-  const users = getData(KEYS.users) || [];
-  if (users.find(u => u.login === login)) { toast('Login já existe', true); return; }
-  const filiais = [...document.querySelectorAll('#auFiliais input:checked')].map(i => i.value);
-  users.push({
-    id: uid(), login, pass,
-    nome: document.getElementById('auNome').value.trim(),
-    perfil: document.getElementById('auPerfil').value,
-    filiais
-  });
-  setData(KEYS.users, users);
-  document.getElementById('auLogin').value = '';
-  document.getElementById('auPass').value = '';
-  document.getElementById('auNome').value = '';
-  renderAdmin();
-  toast('Usuário criado!');
-}
-
-function delUser(id) {
-  let users = getData(KEYS.users) || [];
-  if (users.length <= 1) { toast('Não pode excluir o último usuário', true); return; }
-  users = users.filter(u => u.id !== id);
-  setData(KEYS.users, users);
-  renderAdmin();
-  toast('Usuário removido');
-}
-
-// ===================== BACKUP =====================
-function exportAll() {
-  const data = {};
-  Object.entries(KEYS).forEach(([k, v]) => { data[k] = getData(v); });
-  downloadFile(JSON.stringify(data, null, 2), 'backup_portaria_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json');
-  toast('Backup exportado!');
-}
-
-function importAll(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      const data = JSON.parse(ev.target.result);
-      Object.entries(KEYS).forEach(([k, v]) => { if (data[k]) setData(v, data[k]); });
-      toast('Backup restaurado! Recarregando...');
-      setTimeout(() => location.reload(), 1000);
-    } catch { toast('Arquivo inválido', true); }
-  };
-  reader.readAsText(file);
-}
-
-function resetAll() {
-  if (!confirm('ATENÇÃO: Isso apagará TODOS os dados do sistema. Deseja continuar?')) return;
-  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
-  location.reload();
-}
-
-// ===================== PASSWORD =====================
-function openMyPass() { openModal('modalPass'); }
-
-function changeMyPass() {
-  const old = document.getElementById('myOldP').value;
-  const newP = document.getElementById('myNewP').value;
-  if (!old || !newP) { toast('Preencha os campos', true); return; }
-  if (old !== currentUser.pass) { toast('Senha atual incorreta', true); return; }
-  const users = getData(KEYS.users) || [];
-  const idx = users.findIndex(u => u.id === currentUser.id);
-  if (idx >= 0) {
-    users[idx].pass = newP;
-    currentUser.pass = newP;
-    setData(KEYS.users, users);
-    closeModal('modalPass');
-    toast('Senha alterada!');
-  }
-}
-
-// ===================== QUICK MODALS =====================
-function openPM() { openModal('modalPessoa'); }
-function openVM() { openModal('modalVeiculo'); }
-
-function quickPessoa() {
-  const nome = document.getElementById('mpNome').value.trim();
-  const cpf = document.getElementById('mpCPF').value.trim();
-  if (!nome || !cpf) { toast('Nome e CPF obrigatórios', true); return; }
-  if (!validaCPF(cpf)) { toast('CPF inválido', true); return; }
-  const pessoas = getData(KEYS.pessoas) || [];
-  const p = {
-    id: uid(), nome, cpf,
-    tipo: document.getElementById('mpTipo').value,
-    empresa: document.getElementById('mpEmp').value.trim(),
-    telefone: ''
-  };
-  pessoas.push(p);
-  setData(KEYS.pessoas, pessoas);
-  document.getElementById('mPInput').value = nome;
-  document.getElementById('mP').value = p.id;
-  document.getElementById('mPT').value = p.tipo;
-  closeModal('modalPessoa');
-  document.getElementById('mpNome').value = '';
-  document.getElementById('mpCPF').value = '';
-  document.getElementById('mpEmp').value = '';
-  toast('Pessoa criada e selecionada!');
-}
-
-function quickVeiculo() {
-  const placa = document.getElementById('mvPlaca').value.trim().toUpperCase();
-  if (!placa) { toast('Placa obrigatória', true); return; }
-  const veics = getData(KEYS.veiculos) || [];
-  const v = {
-    id: uid(), placa,
-    categoria: document.getElementById('mvCat').value,
-    modelo: document.getElementById('mvMod').value.trim(),
-    cor: '', proprietario: document.getElementById('mvProp').value.trim(),
-    tipo: 'terceiro', filial: null
-  };
-  veics.push(v);
-  setData(KEYS.veiculos, veics);
-  document.getElementById('mVInput').value = placa;
-  document.getElementById('mV').value = v.id;
-  closeModal('modalVeiculo');
-  document.getElementById('mvPlaca').value = '';
-  document.getElementById('mvMod').value = '';
-  document.getElementById('mvProp').value = '';
-  toast('Veículo criado e selecionado!');
-}
-
-// ===================== MODALS =====================
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
-});
-
-// ===================== VALIDATIONS =====================
-function validaCPF(cpf) {
-  cpf = cpf.replace(/\D/g, '');
-  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-  let s = 0;
-  for (let i = 0; i < 9; i++) s += parseInt(cpf[i]) * (10 - i);
-  let r = 11 - (s % 11);
-  if (r >= 10) r = 0;
-  if (parseInt(cpf[9]) !== r) return false;
-  s = 0;
-  for (let i = 0; i < 10; i++) s += parseInt(cpf[i]) * (11 - i);
-  r = 11 - (s % 11);
-  if (r >= 10) r = 0;
-  return parseInt(cpf[10]) === r;
-}
-
-function validaPlaca(p) {
-  p = p.replace(/[-\s]/g, '').toUpperCase();
-  return /^[A-Z]{3}\d[A-Z0-9]\d{2}$/.test(p) || /^[A-Z]{3}\d{4}$/.test(p);
-}
-
-function validaCNPJ(cnpj) {
-  cnpj = cnpj.replace(/\D/g, '');
-  if (cnpj.length !== 14 || /^(\d)\1+$/.test(cnpj)) return false;
-  let t = cnpj.length - 2, d = cnpj.substring(t), s = 0, p = t - 7;
-  for (let i = t; i >= 1; i--) { s += parseInt(cnpj.charAt(t - i)) * p--; if (p < 2) p = 9; }
-  let r = s % 11 < 2 ? 0 : 11 - (s % 11);
-  if (parseInt(d.charAt(0)) !== r) return false;
-  t++; s = 0; p = t - 7;
-  for (let i = t; i >= 1; i--) { s += parseInt(cnpj.charAt(t - i)) * p--; if (p < 2) p = 9; }
-  r = s % 11 < 2 ? 0 : 11 - (s % 11);
-  return parseInt(d.charAt(1)) === r;
-}
-
-// ===================== MASKS =====================
-function maskCPF(el) {
-  let v = el.value.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, '$1.$2.$3-$4');
-  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d+)/, '$1.$2.$3');
-  else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/, '$1.$2');
-  el.value = v;
-}
-
-function maskCNPJ(el) {
-  let v = el.value.replace(/\D/g, '').slice(0, 14);
-  if (v.length > 12) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d+)/, '$1.$2.$3/$4-$5');
-  else if (v.length > 8) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d+)/, '$1.$2.$3/$4');
-  else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d+)/, '$1.$2.$3');
-  else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/, '$1.$2');
-  el.value = v;
-}
-
-function maskPlaca(el) {
-  let v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 7);
-  if (v.length > 3) v = v.slice(0, 3) + '-' + v.slice(3);
-  el.value = v;
-}
-
-// ===================== UTILS =====================
-function fmtDate(iso) {
-  if (!iso) return '-';
-  const d = new Date(iso);
-  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-}
-
-function tempoDesde(iso) {
-  if (!iso) return '';
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return mins + 'min';
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return hrs + 'h ' + (mins % 60) + 'min';
-  return Math.floor(hrs / 24) + 'd ' + (hrs % 24) + 'h';
-}
-
-function downloadFile(content, name, type) {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-// ===================== INIT =====================
-(function init() {
-  const cfg = getData(KEYS.config);
-  if (!cfg || !cfg.setupDone) {
-    document.getElementById('wizardScreen').style.display = 'flex';
-    showWizStep();
-  } else {
-    document.getElementById('wizardScreen').style.display = 'none';
-    showLogin();
-  }
-  // Enter key login
-  document.getElementById('lP').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  document.getElementById('lU').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+function saveUser(){const login=document.getElementById('auLogin').value.trim(),pass=document.getElementById('auPass').value;if(!login||!pass){toast('Login e senha obrigatórios',true);return}const users=gD(K.users)||[];if(users.find(u=>u.login===login)){toast('Login já existe',true);return}const fils=[...document.querySelectorAll('#auFil input:checked')].map(i=>i.value);users.push({id:uid(),login,pass,nome:document.getElementById('auNome').value.trim(),email:document.getElementById('auEmail').value.trim(),cpf:document.getElementById('auCPF').value.trim(),perfil:document.getElementById('auPerfil').value,filiais:fils});sD(K.users,users);clearUserForm();renderAdmin();toast('Usuário criado!')}
+function clearUserForm(){['auNome','auEmail','auCPF','auLogin','auPass'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('#auFil input').forEach(i=>i.checked=false)}
+function delUser(id){let users=gD(K.users)||[];if(users.length<=1){toast('Não pode excluir o último',true);return}sD(K.users,users.filter(u=>u.id!==id));renderAdmin();toast('Removido')}
+function resetPassModal(id){document.getElementById('rpId').value=id;document.getElementById('rpNew').value='';document.getElementById('rpNew2').value='';openModal('modalResetPass')}
+function resetPass(){const p=document.getElementById('rpNew').value,p2=document.getElementById('rpNew2').value;if(!p||p!==p2){toast('Senhas não conferem',true);return}const users=gD(K.users)||[];const i=users.findIndex(u=>u.id===document.getElementById('rpId').value);if(i>=0){users[i].pass=p;sD(K.users,users);closeModal('modalResetPass');toast('Senha redefinida!')}}
+function saveEmpresa(){const n=document.getElementById('efNome').value.trim();if(!n){toast('Nome obrigatório',true);return}const emps=gD(K.empresas)||[];emps.push({id:uid(),nome:n,cnpj:document.getElementById('efCNPJ').value.trim(),tipo:document.getElementById('efTipo').value,telefone:document.getElementById('efTel').value.trim()});sD(K.empresas,emps);
+// Add to filiais if tipo=filial
+if(document.getElementById('efTipo').value==='filial'){const cfg=gD(K.cfg)||{};if(!cfg.filiais.includes(n)){cfg.filiais.push(n);sD(K.cfg,cfg);popFil()}}
+['efNome','efCNPJ','efTel'].forEach(id=>document.getElementById(id).value='');renderAdmin();toast('Empresa adicionada!')}
+function delEmp(id){let emps=gD(K.empresas)||[];sD(K.empresas,emps.filter(e=>e.id!==id));renderAdmin();toast('Removida')}
+function saveCfg(){const cfg=gD(K.cfg)||{};cfg.company=document.getElementById('cfgN').value.trim();cfg.email=document.getElementById('cfgE').value.trim();cfg.whatsapp=document.getElementById('cfgW').value.trim();sD(K.cfg,cfg);document.getElementById('appTitle').textContent=cfg.company;toast('Configurações salvas!')}
+
+// ===== BACKUP =====
+function exportAll(){const data={};Object.entries(K).forEach(([k,v])=>data[k]=gD(v));dlFile(JSON.stringify(data,null,2),'backup_portaria_'+new Date().toISOString().slice(0,10)+'.json','application/json');toast('Backup exportado!')}
+function importAll(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){try{const d=JSON.parse(ev.target.result);Object.entries(K).forEach(([k,v])=>{if(d[k])sD(v,d[k])});toast('Restaurado! Recarregando...');setTimeout(()=>location.reload(),1000)}catch{toast('Arquivo inválido',true)}};r.readAsText(f)}
+function resetAll(){if(!confirm('ATENÇÃO: Apagar TODOS os dados?'))return;Object.values(K).forEach(k=>localStorage.removeItem(k));location.reload()}
+
+// ===== PASSWORD =====
+function changePass(){const o=document.getElementById('myOldP').value,n=document.getElementById('myNewP').value,n2=document.getElementById('myNewP2').value;if(!o||!n){toast('Preencha os campos',true);return}if(o!==CU.pass){toast('Senha atual incorreta',true);return}if(n!==n2){toast('Senhas não conferem',true);return}const users=gD(K.users)||[];const i=users.findIndex(u=>u.id===CU.id);if(i>=0){users[i].pass=n;CU.pass=n;sD(K.users,users);closeModal('modalPass');toast('Senha alterada!')}}
+
+// ===== MODALS =====
+function openModal(id){document.getElementById(id).classList.add('active')}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active')}));
+
+// ===== MASKS =====
+function maskCPF(el){let v=el.value.replace(/\D/g,'').slice(0,11);if(v.length>9)v=v.replace(/(\d{3})(\d{3})(\d{3})(\d+)/,'$1.$2.$3-$4');else if(v.length>6)v=v.replace(/(\d{3})(\d{3})(\d+)/,'$1.$2.$3');else if(v.length>3)v=v.replace(/(\d{3})(\d+)/,'$1.$2');el.value=v}
+function maskCNPJ(el){let v=el.value.replace(/\D/g,'').slice(0,14);if(v.length>12)v=v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d+)/,'$1.$2.$3/$4-$5');else if(v.length>8)v=v.replace(/(\d{2})(\d{3})(\d{3})(\d+)/,'$1.$2.$3/$4');else if(v.length>5)v=v.replace(/(\d{2})(\d{3})(\d+)/,'$1.$2.$3');else if(v.length>2)v=v.replace(/(\d{2})(\d+)/,'$1.$2');el.value=v}
+function maskPlaca(el){let v=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,7);if(v.length>3)v=v.slice(0,3)+'-'+v.slice(3);el.value=v}
+
+// ===== UTILS =====
+function fD(iso){if(!iso)return'-';const d=new Date(iso);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
+function tD(iso){if(!iso)return'';const diff=Date.now()-new Date(iso).getTime();const m=Math.floor(diff/60000);if(m<60)return m+'min';const h=Math.floor(m/60);if(h<24)return h+'h '+(m%60)+'min';return Math.floor(h/24)+'d '+(h%24)+'h'}
+function dlFile(c,n,t){const b=new Blob([c],{type:t});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u)}
+
+// ===== INIT =====
+(function(){
+const cfg=gD(K.cfg);
+if(!cfg||!cfg.setupDone){document.getElementById('wizardScreen').style.display='flex';showWStep()}
+else{document.getElementById('wizardScreen').style.display='none';showLogin()}
+document.getElementById('lP').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('lU').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 })();
 </script>
 </body>
